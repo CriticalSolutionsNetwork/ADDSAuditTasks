@@ -1,0 +1,23 @@
+TOPIC
+    about_ADDSAuditTasks
+
+SHORT DESCRIPTION
+    Tasks for auditing Active Directory
+
+LONG DESCRIPTION
+    Multiple functions for conducting Audit Tasks in Active Directory.
+EXAMPLES
+    PS C:\> Get-ADDSActiveAccountAudit -LocalDisk
+
+NOTE:
+    Thank you to all those who contributed to this module, by writing code, sharing opinions, and provided feedback.
+
+TROUBLESHOOTING NOTE:
+    Look out on the Github repository for issues and new releases.
+
+SEE ALSO
+  - https://github.com/CriticalSolutionsNetwork/ADDSAuditTasks
+
+KEYWORDS
+      ActiveDirectory,PowerShellModule
+
