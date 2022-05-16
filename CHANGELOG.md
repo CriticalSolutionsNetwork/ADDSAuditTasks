@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed Timestamp unassigned variable.
+- Fixed unassigned time variables in public functions.
+
 ## [1.4.0] - 2022-05-15
 
 ### Fixed
