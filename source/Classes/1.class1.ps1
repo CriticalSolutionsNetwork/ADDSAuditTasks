@@ -2,6 +2,7 @@ class ADAuditAccount {
     [string]$UserName
     [string]$FirstName
     [string]$LastName
+    [string]$Name
     [string]$UPN
     [string]$LastSignIn
     [string]$Enabled
@@ -22,6 +23,7 @@ class ADAuditAccount {
         [string]$UserName,
         [string]$FirstName,
         [string]$LastName,
+        [string]$Name,
         [string]$UPN,
         [string]$LastSignIn,
         [string]$Enabled,
@@ -36,6 +38,7 @@ class ADAuditAccount {
         $this.UserName = $UserName
         $this.FirstName = $FirstName
         $this.LastName = $LastName
+        $this.Name = $Name
         $this.UPN = $UPN
         $this.LastSignIn = ([DateTime]::FromFileTime($LastSignIn))
         $this.Enabled = $Enabled

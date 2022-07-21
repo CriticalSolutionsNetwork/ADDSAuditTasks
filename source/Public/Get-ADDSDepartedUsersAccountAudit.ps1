@@ -221,7 +221,7 @@ function Get-ADDSDepartedUsersAccountAudit {
             # Get ad user with Name String Filter
             $WildCardIdentifierstring = '*' + $WildCardIdentifier + '*'
                 Get-aduser -Filter { Name -like $WildCardIdentifierstring } -Properties `
-                samaccountname,GivenName, Surname, UserPrincipalName,lastlogontimestamp, DistinguishedName, `
+                samaccountname, GivenName, Surname, Name, UserPrincipalName,lastlogontimestamp, DistinguishedName, `
                 Title, Enabled, Description, Manager, Department -OutVariable ADExport | Out-Null
             $Export = @()
 
@@ -230,6 +230,7 @@ function Get-ADDSDepartedUsersAccountAudit {
                     $($accountItem.SamAccountName),
                     $($accountItem.GivenName),
                     $($accountItem.Surname),
+                    $($accountItem.Name),
                     $($accountItem.UserPrincipalName),
                     $($accountItem.LastLogonTimeStamp),
                     $($accountItem.Enabled),

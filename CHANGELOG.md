@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2022-07-21
+
+### Added
+
+- Added Name parameter to `Get-ADDSActiveUsersAudit` and `Get-ADDSDepartedUsersAudit`
+
 ## [1.5.4] - 2022-07-21
 
 ### Fixed
