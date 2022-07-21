@@ -243,7 +243,7 @@ function Get-ADDSActiveAccountAudit {
             # Create FileNames
             $csv = "$csvFileName.csv"
             $zip = "$csvFileName.zip"
-            Write-TSLog "Searching for users who have signed in within the last $DaysInactive days, where parameter Enabled = $Enabled"
+            Write-TSLog "Searching for users who have not signed in within the last $DaysInactive days, where parameter Enabled = $Enabled"
             # Audit Script with export to csv and zip. Paramters for Manager, lastLogonTimestamp and DistinguishedName normalized.
 
             # GetActiveUsers
