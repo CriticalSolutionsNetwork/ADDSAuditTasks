@@ -248,7 +248,7 @@ function Get-ADDSActiveAccountAudit {
 
             # GetActiveUsers
             Get-aduser -Filter { LastLogonTimeStamp -lt $time -and Enabled -eq $Enabled } -Properties `
-                samaccountname,GivenName, Surname, UserPrincipalName,lastlogontimestamp, DistinguishedName, `
+                samaccountname,GivenName, Surname, Name, UserPrincipalName,lastlogontimestamp, DistinguishedName, `
                 Title, Enabled, Description, Manager, Department -OutVariable ADExport
             $Export = @()
 
@@ -257,6 +257,7 @@ function Get-ADDSActiveAccountAudit {
                     $($accountItem.SamAccountName),
                     $($accountItem.GivenName),
                     $($accountItem.Surname),
+                    $($accountItem.Name),
                     $($accountItem.UserPrincipalName),
                     $($accountItem.LastLogonTimeStamp),
                     $($accountItem.Enabled),
