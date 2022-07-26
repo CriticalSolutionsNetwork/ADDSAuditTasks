@@ -10,7 +10,7 @@ function Format-HRRoster {
     .LINK
         Specify a URI to a help page, this will show when Get-Help -Online is used.
     .EXAMPLE
-        Test-MyTestFunction -Verbose
+        Format-HRRoster -HRRosterCSV "C:\temp\HRRosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
         Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
     #>
     [CmdletBinding()]
