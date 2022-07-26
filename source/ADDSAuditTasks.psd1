@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.5.4'
+    ModuleVersion     = '1.7.1'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -108,12 +108,11 @@
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.5.4] - 2022-07-21
+            ReleaseNotes = '## [1.6.0] - 2022-07-21
 
-### Fixed
+### Added
 
-- Fixed Log output of ADDSActiveUserAudit function.
-- Fixed Release
+- Added Name parameter to `Get-ADDSActiveUsersAudit` and `Get-ADDSDepartedUsersAudit`
 
 '
 
