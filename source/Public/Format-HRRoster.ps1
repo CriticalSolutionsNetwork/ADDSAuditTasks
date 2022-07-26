@@ -28,19 +28,25 @@ function Format-HRRoster {
             Position = 1
         )][string]$AttachmentFolder = "C:\temp\ActiveUsersHR"
     )
-    $AttachmentFolderPathCheck = Test-Path -Path $AttachmentFolder
-    If (!($AttachmentFolderPathCheck)) {
-        # If not present then create the dir
-        New-Item -ItemType Directory $AttachmentFolder -Force -ErrorAction Stop
+    begin {
+        $AttachmentFolderPathCheck = Test-Path -Path $AttachmentFolder
+        If (!($AttachmentFolderPathCheck)) {
+            # If not present then create the dir
+            New-Item -ItemType Directory $AttachmentFolder -Force -ErrorAction Stop
+        }
+        $HRCSV = Import-Csv $HRRosterCSV
     }
-    $HRCSV = Import-Csv $HRRosterCSV
-    $Export = @()
-    foreach ($user in $HRCSV) {
-        $a, $b = ($user.Name).split(' ')
-        New-Object -TypeName PSCustomObject -Property @{
-            NewName = "$b $a"
-        } -OutVariable PSObject | Out-Null
-        $Export += $PSObject
+    Process {
+        $Export = @()
+        foreach ($user in $HRCSV) {
+            $a, $b = ($user.Name).split(' ')
+            New-Object -TypeName PSCustomObject -Property @{
+                NewName = "$b $a"
+            } -OutVariable PSObject | Out-Null
+            $Export += $PSObject
+        }
     }
-    $Export | Export-Csv "$($home)\Documents\$((Get-Date).ToString("yyyy.MM.dd hh.mm tt")).HRRosterFirstNameSpaceLastName.csv" -NoTypeInformation
+    end {
+        $Export | Export-Csv "$($home)\Documents\$((Get-Date).ToString("yyyy.MM.dd hh.mm tt")).HRRosterFirstNameSpaceLastName.csv" -NoTypeInformation
+    }
 }
