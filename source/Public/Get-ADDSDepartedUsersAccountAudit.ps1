@@ -188,7 +188,7 @@ function Get-ADDSDepartedUsersAccountAudit {
         )]
         [switch]$Clean,
         [Parameter(ParameterSetName = 'WinSCP', Mandatory = $true)]
-        [Parameter(ParameterSetName = 'FunctionApp',Mandatory = $true)]
+        [Parameter(ParameterSetName = 'FunctionApp', Mandatory = $true)]
         [Parameter(ParameterSetName = 'SendMailMessage', Mandatory = $true)]
         [Parameter(
             Mandatory = $true,
@@ -220,25 +220,26 @@ function Get-ADDSDepartedUsersAccountAudit {
             # Audit Script with export to csv and zip.
             # Get ad user with Name String Filter
             $WildCardIdentifierstring = '*' + $WildCardIdentifier + '*'
-                Get-aduser -Filter { Name -like $WildCardIdentifierstring } -Properties `
-                samaccountname, GivenName, Surname, Name, UserPrincipalName,lastlogontimestamp, DistinguishedName, `
-                Title, Enabled, Description, Manager, Department -OutVariable ADExport | Out-Null
+            Get-aduser -Filter { Name -like $WildCardIdentifierstring } -Properties `
+                samaccountname, GivenName, Surname, Name, UserPrincipalName, lastlogontimestamp, DistinguishedName, `
+                Title, Enabled, Description, Manager, Department `
+                -OutVariable ADExport | Out-Null
             $Export = @()
 
-            foreach ($accountItem in $ADExport) {
+            foreach ($item in $ADExport) {
                 $Export += [ADAuditAccount]::new(
-                    $($accountItem.SamAccountName),
-                    $($accountItem.GivenName),
-                    $($accountItem.Surname),
-                    $($accountItem.Name),
-                    $($accountItem.UserPrincipalName),
-                    $($accountItem.LastLogonTimeStamp),
-                    $($accountItem.Enabled),
-                    $($accountItem.LastLogonTimeStamp),
-                    $($accountItem.DistinguishedName),
-                    $($accountItem.Title),
-                    $($accountItem.Manager),
-                    $($accountItem.Department),
+                    $($item.SamAccountName),
+                    $($item.GivenName),
+                    $($item.Surname),
+                    $($item.Name),
+                    $($item.UserPrincipalName),
+                    $($item.LastLogonTimeStamp),
+                    $($item.Enabled),
+                    $($item.LastLogonTimeStamp),
+                    $($item.DistinguishedName),
+                    $($item.Title),
+                    $($item.Manager),
+                    $($item.Department),
                     $false,
                     $false
                 )
