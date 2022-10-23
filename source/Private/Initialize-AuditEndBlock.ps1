@@ -129,7 +129,7 @@ function Initialize-AuditEndBlock {
                 Write-TSLog "Files: $ZipEnd"
                 Write-TSLog $SshHostKeyFingerprintEnd
                 Submit-FTPUpload -FTPUserName $UserNameEnd -Password $Password `
-                -FTPHostName $FTPHostEnd -LocalFilePath ($ZipEnd).Split(" ") -SshHostKeyFingerprint $SshHostKeyFingerprintEnd -RemoteFTPPath $RemotePathEnd -ErrorVariable SubmitFTPErr
+                    -FTPHostName $FTPHostEnd -LocalFilePath ($ZipEnd).Split(" ") -SshHostKeyFingerprint $SshHostKeyFingerprintEnd -RemoteFTPPath $RemotePathEnd -ErrorVariable SubmitFTPErr
                 if ($?) {
                     Write-TSLog  "The ADDSAuditTask archive have been uploaded to ftp."
                     Write-TSLog -End

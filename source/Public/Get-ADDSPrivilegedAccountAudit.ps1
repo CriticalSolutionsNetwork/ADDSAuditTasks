@@ -260,7 +260,7 @@ function Get-ADDSPrivilegedAccountAudit {
             $Export = @()
             # Create $Export Object
             foreach ($User in $ADUsers) {
-                new-object -TypeName PSCustomObject -Property @{
+                New-Object -TypeName PSCustomObject -Property @{
                     SamAccountName    = $User.SamAccountName
                     Name              = $User.Name
                     PriviledgedGroup  = $User.PriviledgedGroup
@@ -287,7 +287,7 @@ function Get-ADDSPrivilegedAccountAudit {
             $rootou = (Get-ADRootDSE).defaultNamingContext
             # Get ad objects from the PDC for the root ou. #TODO Check
             $Allobjects = Get-ADObject -Server $dc -Searchbase $rootou -SearchScope subtree -LDAPFilter `
-            "(&(objectclass=user)(objectcategory=person))" -Properties ntSecurityDescriptor -ResultSetSize $null
+                "(&(objectclass=user)(objectcategory=person))" -Properties ntSecurityDescriptor -ResultSetSize $null
             # "(|(objectClass=domain)(objectClass=organizationalUnit)(objectClass=group)(sAMAccountType=805306368)(objectCategory=Computer)(&(objectclass=user)(objectcategory=person)))"
             # Create $Export2 Object
             $Export2 = Foreach ($ADObject in $Allobjects) {
