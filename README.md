@@ -1,35 +1,4 @@
 # ADDSAuditTasks Module
-## Format-HRRoster
-### Synopsis
-Takes CSV input as "LastName\<space\>FirstName" and flips it to "Firstname\<space\>Lastname"
-### Syntax
-```powershell
-
-Format-HRRoster [[-HRRosterCSV] <String>] [[-AttachmentFolder] <String>] [<CommonParameters>]
-
-
-
-
-```
-### Parameters
-| Name  | Alias  | Description | Required? | Pipeline Input | Default Value |
-| - | - | - | - | - | - |
-| <nobr>HRRosterCSV</nobr> |  |  | false | true \\(ByValue, ByPropertyName\) |  |
-| <nobr>AttachmentFolder</nobr> |  |  | false | true \\(ByPropertyName\) | C:\\temp\\ActiveUsersHR |
-### Note
-This function depends on the name column in the employee roster name column, to have been formatted in excel using a find and replace to replace ", " with " ". In other words: The file needs to have "comma space" replaces with "space" in the name column to be easily compared to ADUser output.
-
-### Examples
-**EXAMPLE 1**
-```powershell
-Format-HRRoster -HRRosterCSV "C:\temp\HRRosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
-Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
-```
-
-
-### Links
-
- - [Specify a URI to a help page, this will show when Get-Help -Online is used.](#Specify a URI to a help page, this will show when Get-Help -Online is used.)
 ## Get-ADDSActiveAccountAudit
 ### Synopsis
 Active Directory Audit with Keyvault retrieval option.
@@ -55,25 +24,25 @@ Get-ADDSActiveAccountAudit [-Clean] [<CommonParameters>]
 | - | - | - | - | - | - |
 | <nobr>LocalDisk</nobr> |  | Only output data to local disk. | true | false | False |
 | <nobr>SendMailMessage</nobr> |  | Adds parameters for sending Audit Report as an Email. | true | false | False |
-| <nobr>WinSCP</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \\(ByPropertyName\) | False |
+| <nobr>WinSCP</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \(ByPropertyName\) | False |
 | <nobr>FunctionApp</nobr> |  | Azure Function App Name. | true | false |  |
-| <nobr>Function</nobr> |  | Azure Function App's Function Name. Ex. "HttpTrigger1" | true | true \\(ByPropertyName\) |  |
-| <nobr>SMTPServer</nobr> |  | Defaults to Office 365 SMTP relay. Enter optional relay here. | false | true \\(ByPropertyName\) | smtp.office365.com |
-| <nobr>AttachmentFolderPath</nobr> |  | Default path is C:\\temp\\ADDSActiveAccountAuditLogs. This is the folder where attachments are going to be saved. | false | true \\(ByValue\) | C:\\temp\\ADDSActiveAccountAuditLogs |
-| <nobr>ADDSAccountIsNotEnabled</nobr> |  | Defaults to not being set. Choose to search for disabled Active Directory Users. | false | true \\(ByPropertyName\) | False |
-| <nobr>DaysInactive</nobr> |  | Defaults to 90 days in the past. Specifies how far back to look for accounts last logon. If logon is within 90 days, it won't be included. | false | true \\(ByPropertyName\) | 90 |
-| <nobr>UserName</nobr> |  | Specify the account with an active mailbox and MFA disabled. Ensure the account has delegated access for Send On Behalf for any UPN set in the "$From" Parameter | true | true \\(ByPropertyName\) |  |
-| <nobr>Password</nobr> |  | Use: \\(Read-Host -AsSecureString\) as in Examples. May be omitted. | false | true \\(ByPropertyName\) |  |
-| <nobr>Port</nobr> |  | SMTP Port to Relay. Ports can be: "993", "995", "587", or "25" | false | true \\(ByPropertyName\) | 587 |
-| <nobr>To</nobr> |  | Recipient of the attachment outputs. | true | true \\(ByPropertyName\) |  |
-| <nobr>From</nobr> |  | Defaults to the same account as $UserName unless the parameter is set. Ensure the Account has delegated access to send on behalf for the $From account. | false | true \\(ByPropertyName\) | $UserName |
-| <nobr>ApiToken</nobr> |  | Private Function Key. | true | true \\(ByPropertyName\) |  |
-| <nobr>FTPHost</nobr> |  | SFTP Hostname. | true | true \\(ByPropertyName\) |  |
-| <nobr>SshHostKeyFingerprint</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \\(ByPropertyName\) |  |
-| <nobr>RemotePath</nobr> |  | Remove FTP path. Will be created in the user path under functionname folder if not specified. | false | true \\(ByPropertyName\) | \\("./" \+ $\\($MyInvocation.MyCommand.Name -replace '\\..\*'\)\) |
+| <nobr>Function</nobr> |  | Azure Function App's Function Name. Ex. "HttpTrigger1" | true | true \(ByPropertyName\) |  |
+| <nobr>SMTPServer</nobr> |  | Defaults to Office 365 SMTP relay. Enter optional relay here. | false | true \(ByPropertyName\) | smtp.office365.com |
+| <nobr>AttachmentFolderPath</nobr> |  | Default path is C:\\temp\\ADDSActiveAccountAuditLogs. This is the folder where attachments are going to be saved. | false | true \(ByValue\) | C:\\temp\\ADDSActiveAccountAuditLogs |
+| <nobr>ADDSAccountIsNotEnabled</nobr> |  | Defaults to not being set. Choose to search for disabled Active Directory Users. | false | true \(ByPropertyName\) | False |
+| <nobr>DaysInactive</nobr> |  | Defaults to 90 days in the past. Specifies how far back to look for accounts last logon. If logon is within 90 days, it won't be included. | false | true \(ByPropertyName\) | 90 |
+| <nobr>UserName</nobr> |  | Specify the account with an active mailbox and MFA disabled. Ensure the account has delegated access for Send On Behalf for any UPN set in the "$From" Parameter | true | true \(ByPropertyName\) |  |
+| <nobr>Password</nobr> |  | Use: \(Read-Host -AsSecureString\) as in Examples. May be omitted. | false | true \(ByPropertyName\) |  |
+| <nobr>Port</nobr> |  | SMTP Port to Relay. Ports can be: "993", "995", "587", or "25" | false | true \(ByPropertyName\) | 587 |
+| <nobr>To</nobr> |  | Recipient of the attachment outputs. | true | true \(ByPropertyName\) |  |
+| <nobr>From</nobr> |  | Defaults to the same account as $UserName unless the parameter is set. Ensure the Account has delegated access to send on behalf for the $From account. | false | true \(ByPropertyName\) | $UserName |
+| <nobr>ApiToken</nobr> |  | Private Function Key. | true | true \(ByPropertyName\) |  |
+| <nobr>FTPHost</nobr> |  | SFTP Hostname. | true | true \(ByPropertyName\) |  |
+| <nobr>SshHostKeyFingerprint</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \(ByPropertyName\) |  |
+| <nobr>RemotePath</nobr> |  | Remove FTP path. Will be created in the user path under functionname folder if not specified. | false | true \(ByPropertyName\) | \("./" \+ $\($MyInvocation.MyCommand.Name -replace '\\..\*'\)\) |
 | <nobr>Clean</nobr> |  | Remove installed modules during run. Remove local files if not a LocalDisk run. | true | false | False |
 ### Note
-Can take password as input into secure string using \\(Read-Host -AsSecureString\).
+Can take password as input into secure string using \(Read-Host -AsSecureString\).
 
 ### Examples
 **EXAMPLE 1**
@@ -131,24 +100,24 @@ Get-ADDSDepartedUsersAccountAudit [-Clean] [<CommonParameters>]
 | - | - | - | - | - | - |
 | <nobr>LocalDisk</nobr> |  | Only output data to local disk. | true | false | False |
 | <nobr>SendMailMessage</nobr> |  | Adds parameters for sending Audit Report as an Email. | true | false | False |
-| <nobr>WinSCP</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \\(ByPropertyName\) | False |
+| <nobr>WinSCP</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \(ByPropertyName\) | False |
 | <nobr>FunctionApp</nobr> |  | Azure Function App Name. | true | false |  |
-| <nobr>Function</nobr> |  | Azure Function App's Function Name. Ex. "HttpTrigger1" | true | true \\(ByPropertyName\) |  |
-| <nobr>SMTPServer</nobr> |  | Defaults to Office 365 SMTP relay. Enter optional relay here. | false | true \\(ByPropertyName\) | smtp.office365.com |
-| <nobr>AttachmentFolderPath</nobr> |  | Default path is C:\\temp\\ADDSDepartedUsersAuditLogs. This is the folder where attachments are going to be saved. | false | true \\(ByValue\) | C:\\temp\\ADDSDepartedUsersAuditLogs |
-| <nobr>UserName</nobr> |  | Specify the account with an active mailbox and MFA disabled. Ensure the account has delegated access for Send On Behalf for any UPN set in the "$From" Parameter | true | true \\(ByPropertyName\) |  |
-| <nobr>Password</nobr> |  | Use: \\(Read-Host -AsSecureString\) as in Examples. May be omitted. | false | true \\(ByPropertyName\) |  |
-| <nobr>Port</nobr> |  | SMTP Port to Relay. Ports can be: "993", "995", "587", or "25" | false | true \\(ByPropertyName\) | 587 |
-| <nobr>To</nobr> |  | Recipient of the attachment outputs. | true | true \\(ByPropertyName\) |  |
-| <nobr>From</nobr> |  | Defaults to the same account as $UserName unless the parameter is set. Ensure the Account has delegated access to send on behalf for the $From account. | false | true \\(ByPropertyName\) | $UserName |
-| <nobr>ApiToken</nobr> |  | Private Function Key. | true | true \\(ByPropertyName\) |  |
-| <nobr>FTPHost</nobr> |  |  | true | true \\(ByPropertyName\) |  |
-| <nobr>SshHostKeyFingerprint</nobr> |  |  | true | true \\(ByPropertyName\) |  |
-| <nobr>RemotePath</nobr> |  |  | false | true \\(ByPropertyName\) | \\("./" \+ $\\($MyInvocation.MyCommand.Name -replace '\\..\*'\)\) |
+| <nobr>Function</nobr> |  | Azure Function App's Function Name. Ex. "HttpTrigger1" | true | true \(ByPropertyName\) |  |
+| <nobr>SMTPServer</nobr> |  | Defaults to Office 365 SMTP relay. Enter optional relay here. | false | true \(ByPropertyName\) | smtp.office365.com |
+| <nobr>AttachmentFolderPath</nobr> |  | Default path is C:\\temp\\ADDSDepartedUsersAuditLogs. This is the folder where attachments are going to be saved. | false | true \(ByValue\) | C:\\temp\\ADDSDepartedUsersAuditLogs |
+| <nobr>UserName</nobr> |  | Specify the account with an active mailbox and MFA disabled. Ensure the account has delegated access for Send On Behalf for any UPN set in the "$From" Parameter | true | true \(ByPropertyName\) |  |
+| <nobr>Password</nobr> |  | Use: \(Read-Host -AsSecureString\) as in Examples. May be omitted. | false | true \(ByPropertyName\) |  |
+| <nobr>Port</nobr> |  | SMTP Port to Relay. Ports can be: "993", "995", "587", or "25" | false | true \(ByPropertyName\) | 587 |
+| <nobr>To</nobr> |  | Recipient of the attachment outputs. | true | true \(ByPropertyName\) |  |
+| <nobr>From</nobr> |  | Defaults to the same account as $UserName unless the parameter is set. Ensure the Account has delegated access to send on behalf for the $From account. | false | true \(ByPropertyName\) | $UserName |
+| <nobr>ApiToken</nobr> |  | Private Function Key. | true | true \(ByPropertyName\) |  |
+| <nobr>FTPHost</nobr> |  |  | true | true \(ByPropertyName\) |  |
+| <nobr>SshHostKeyFingerprint</nobr> |  |  | true | true \(ByPropertyName\) |  |
+| <nobr>RemotePath</nobr> |  |  | false | true \(ByPropertyName\) | \("./" \+ $\($MyInvocation.MyCommand.Name -replace '\\..\*'\)\) |
 | <nobr>Clean</nobr> |  | Remove installed modules during run. Remove local files if not a LocalDisk run. | true | false | False |
-| <nobr>WildCardIdentifier</nobr> |  | Name wildcard appended to user account. | true | true \\(ByPropertyName\) |  |
+| <nobr>WildCardIdentifier</nobr> |  | Name wildcard appended to user account. | true | true \(ByPropertyName\) |  |
 ### Note
-Can take password as input into secure string using \\(Read-Host -AsSecureString\).
+Can take password as input into secure string using \(Read-Host -AsSecureString\).
 
 ### Examples
 **EXAMPLE 1**
@@ -206,23 +175,23 @@ Get-ADDSPrivilegedAccountAudit [-Clean] [<CommonParameters>]
 | - | - | - | - | - | - |
 | <nobr>LocalDisk</nobr> |  | Only output data to local disk. | true | false | False |
 | <nobr>SendMailMessage</nobr> |  | Adds parameters for sending Audit Report as an Email. | true | false | False |
-| <nobr>WinSCP</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \\(ByPropertyName\) | False |
+| <nobr>WinSCP</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \(ByPropertyName\) | False |
 | <nobr>FunctionApp</nobr> |  | Azure Function App Name. | true | false |  |
-| <nobr>Function</nobr> |  | Azure Function App's Function Name. Ex. "HttpTrigger1" | true | true \\(ByPropertyName\) |  |
-| <nobr>SMTPServer</nobr> |  | Defaults to Office 365 SMTP relay. Enter optional relay here. | false | true \\(ByPropertyName\) | smtp.office365.com |
-| <nobr>AttachmentFolderPath</nobr> |  | Default path is C:\\temp\\ADDSPrivilegedAccountAuditLogs. This is the folder where attachments are going to be saved. | false | true \\(ByValue\) | C:\\temp\\ADDSPrivilegedAccountAuditLogs |
-| <nobr>UserName</nobr> |  | Specify the account with an active mailbox and MFA disabled. Ensure the account has delegated access for Send On Behalf for any UPN set in the "$From" Parameter | true | true \\(ByPropertyName\) |  |
-| <nobr>Password</nobr> |  | Use: \\(Read-Host -AsSecureString\) as in Examples. May be omitted. | false | true \\(ByPropertyName\) |  |
-| <nobr>Port</nobr> |  | SMTP Port to Relay. Ports can be: "993", "995", "587", or "25" | false | true \\(ByPropertyName\) | 587 |
-| <nobr>To</nobr> |  | Recipient of the attachment outputs. | true | true \\(ByPropertyName\) |  |
-| <nobr>From</nobr> |  | Defaults to the same account as $UserName unless the parameter is set. Ensure the Account has delegated access to send on behalf for the $From account. | false | true \\(ByPropertyName\) | $UserName |
-| <nobr>ApiToken</nobr> |  | Private Function Key. | true | true \\(ByPropertyName\) |  |
-| <nobr>FTPHost</nobr> |  | SFTP Hostname. | true | true \\(ByPropertyName\) |  |
-| <nobr>SshHostKeyFingerprint</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \\(ByPropertyName\) |  |
-| <nobr>RemotePath</nobr> |  | Remove FTP path. Will be created in the user path under functionname folder if not specified. | false | true \\(ByPropertyName\) | \\("./" \+ $\\($MyInvocation.MyCommand.Name -replace '\\..\*'\)\) |
+| <nobr>Function</nobr> |  | Azure Function App's Function Name. Ex. "HttpTrigger1" | true | true \(ByPropertyName\) |  |
+| <nobr>SMTPServer</nobr> |  | Defaults to Office 365 SMTP relay. Enter optional relay here. | false | true \(ByPropertyName\) | smtp.office365.com |
+| <nobr>AttachmentFolderPath</nobr> |  | Default path is C:\\temp\\ADDSPrivilegedAccountAuditLogs. This is the folder where attachments are going to be saved. | false | true \(ByValue\) | C:\\temp\\ADDSPrivilegedAccountAuditLogs |
+| <nobr>UserName</nobr> |  | Specify the account with an active mailbox and MFA disabled. Ensure the account has delegated access for Send On Behalf for any UPN set in the "$From" Parameter | true | true \(ByPropertyName\) |  |
+| <nobr>Password</nobr> |  | Use: \(Read-Host -AsSecureString\) as in Examples. May be omitted. | false | true \(ByPropertyName\) |  |
+| <nobr>Port</nobr> |  | SMTP Port to Relay. Ports can be: "993", "995", "587", or "25" | false | true \(ByPropertyName\) | 587 |
+| <nobr>To</nobr> |  | Recipient of the attachment outputs. | true | true \(ByPropertyName\) |  |
+| <nobr>From</nobr> |  | Defaults to the same account as $UserName unless the parameter is set. Ensure the Account has delegated access to send on behalf for the $From account. | false | true \(ByPropertyName\) | $UserName |
+| <nobr>ApiToken</nobr> |  | Private Function Key. | true | true \(ByPropertyName\) |  |
+| <nobr>FTPHost</nobr> |  | SFTP Hostname. | true | true \(ByPropertyName\) |  |
+| <nobr>SshHostKeyFingerprint</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \(ByPropertyName\) |  |
+| <nobr>RemotePath</nobr> |  | Remove FTP path. Will be created in the user path under functionname folder if not specified. | false | true \(ByPropertyName\) | \("./" \+ $\($MyInvocation.MyCommand.Name -replace '\\..\*'\)\) |
 | <nobr>Clean</nobr> |  | Remove installed modules during run. Remove local files if not a LocalDisk run. | true | false | False |
 ### Note
-Can take password as input into secure string using \\(Read-Host -AsSecureString\).
+Can take password as input into secure string using \(Read-Host -AsSecureString\).
 
 ### Examples
 **EXAMPLE 1**
@@ -270,7 +239,7 @@ Get-ADUsersLastLogon [-SamAccountName] <Object> [<CommonParameters>]
 ### Parameters
 | Name  | Alias  | Description | Required? | Pipeline Input | Default Value |
 | - | - | - | - | - | - |
-| <nobr>SamAccountName</nobr> | Identity, UserName, Account | The SamAccountName of the user being checked for LastLogon. | true | true \\(ByValue\) |  |
+| <nobr>SamAccountName</nobr> | Identity, UserName, Account | The SamAccountName of the user being checked for LastLogon. | true | true \(ByValue\) |  |
 ### Outputs
  - System.DateTime
 
@@ -281,3 +250,64 @@ Get-ADUsersLastLogon -SamAccountName "UserName"
 ```
 
 
+## Get-NetworkScan
+### Synopsis
+Discovers local network and runs port scans on all hosts found for specific or default sets of ports.
+### Syntax
+```powershell
+
+Get-NetworkScan [[-Ports] <Int32[]>] [-Report] [<CommonParameters>]
+
+
+
+
+```
+### Parameters
+| Name  | Alias  | Description | Required? | Pipeline Input | Default Value |
+| - | - | - | - | - | - |
+| <nobr>Ports</nobr> |  | Default ports are: "21", "22", "25", "53", "67", "68", "80", "443", \` "88", "464", "123", "135", "137", "138", "139", \` "445", "389", "636", "514", "587", "1701", \` "3268", "3269", "3389", "5985", "5986"  If you want to supply a port, do so as an integer or an array of integers. "22","80","443",etc. | false | true \(ByPropertyName\) |  |
+| <nobr>Report</nobr> |  | Specify this switch if you would like a report generated in C:\\temp. | false | false | False |
+### Note
+Installs PSnmap if not found and can output a report, or just the results.
+
+### Examples
+**EXAMPLE 1**
+```powershell
+Get-NetworkScan -report
+Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
+```
+
+
+### Links
+
+ - [Specify a URI to a help page, this will show when Get-Help -Online is used.](#Specify a URI to a help page, this will show when Get-Help -Online is used.)
+## Switch-SurnameWithGivenName
+### Synopsis
+Takes CSV input as "LastName\\<space\>FirstName" and flips it to "Firstname\\<space\>Lastname"
+### Syntax
+```powershell
+
+Switch-SurnameWithGivenName [[-RosterCSV] <String>] [[-AttachmentFolder] <String>] [<CommonParameters>]
+
+
+
+
+```
+### Parameters
+| Name  | Alias  | Description | Required? | Pipeline Input | Default Value |
+| - | - | - | - | - | - |
+| <nobr>RosterCSV</nobr> |  |  | false | true \(ByValue, ByPropertyName\) |  |
+| <nobr>AttachmentFolder</nobr> |  |  | false | true \(ByPropertyName\) | C:\\temp\\Switch-SurnameWithGivenName |
+### Note
+This function depends on the name column in the employee roster name column, to have been formatted in excel using a find and replace to replace ", " with " ". In other words: The file needs to have "comma space" replaces with "space" in the name column to be easily compared to ADUser output.
+
+### Examples
+**EXAMPLE 1**
+```powershell
+Switch-SurnameWithGivenName -RosterCSV "C:\temp\RosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
+```
+
+
+### Links
+
+ - [Specify a URI to a help page, this will show when Get-Help -Online is used.](#Specify a URI to a help page, this will show when Get-Help -Online is used.)

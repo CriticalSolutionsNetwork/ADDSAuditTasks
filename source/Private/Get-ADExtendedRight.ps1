@@ -24,7 +24,7 @@ Function Get-AdExtendedRight([Microsoft.ActiveDirectory.Management.ADObject] $AD
                     CanActOnThePermissionof = "$($ADObject.name)" + " " + "($($ADObject.DistinguishedName))"
                     WithExtendedRight       = $Right
                 }
-                $ExportER += new-object -TypeName PSObject -Property $Rights
+                $ExportER += New-Object -TypeName PSObject -Property $Rights
 
                 #"$($Access.IdentityReference) can act on the permission of $($ADObject.name) ($($ADObject.DistinguishedName)) with extended right: $Right"
             } # Endif

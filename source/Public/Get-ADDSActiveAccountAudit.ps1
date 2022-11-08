@@ -248,24 +248,24 @@ function Get-ADDSActiveAccountAudit {
 
             # GetActiveUsers
             Get-aduser -Filter { LastLogonTimeStamp -lt $time -and Enabled -eq $Enabled } -Properties `
-                samaccountname,GivenName, Surname, Name, UserPrincipalName,lastlogontimestamp, DistinguishedName, `
+                samaccountname, GivenName, Surname, Name, UserPrincipalName, lastlogontimestamp, DistinguishedName, `
                 Title, Enabled, Description, Manager, Department -OutVariable ADExport
             $Export = @()
 
-            foreach ($accountItem in $ADExport) {
+            foreach ($item in $ADExport) {
                 $Export += [ADAuditAccount]::new(
-                    $($accountItem.SamAccountName),
-                    $($accountItem.GivenName),
-                    $($accountItem.Surname),
-                    $($accountItem.Name),
-                    $($accountItem.UserPrincipalName),
-                    $($accountItem.LastLogonTimeStamp),
-                    $($accountItem.Enabled),
-                    $($accountItem.LastLogonTimeStamp),
-                    $($accountItem.DistinguishedName),
-                    $($accountItem.Title),
-                    $($accountItem.Manager),
-                    $($accountItem.Department),
+                    $($item.SamAccountName),
+                    $($item.GivenName),
+                    $($item.Surname),
+                    $($item.Name),
+                    $($item.UserPrincipalName),
+                    $($item.LastLogonTimeStamp),
+                    $($item.Enabled),
+                    $($item.LastLogonTimeStamp),
+                    $($item.DistinguishedName),
+                    $($item.Title),
+                    $($item.Manager),
+                    $($item.Department),
                     $false,
                     $false
                 )

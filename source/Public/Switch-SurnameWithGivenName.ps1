@@ -1,4 +1,4 @@
-function Format-HRRoster {
+function Switch-SurnameWithGivenName {
     <#
     .SYNOPSIS
         Takes CSV input as "LastName<space>FirstName" and flips it to "Firstname<space>Lastname"
@@ -10,8 +10,7 @@ function Format-HRRoster {
     .LINK
         Specify a URI to a help page, this will show when Get-Help -Online is used.
     .EXAMPLE
-        Format-HRRoster -HRRosterCSV "C:\temp\HRRosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
-        Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
+        Switch-SurnameWithGivenName -RosterCSV "C:\temp\RosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
     #>
     [CmdletBinding()]
     param (
@@ -21,12 +20,12 @@ function Format-HRRoster {
             ValueFromPipelineByPropertyName = $true,
             Position = 0
         )]
-        [string]$HRRosterCSV,
+        [string]$RosterCSV,
         [Parameter(
             HelpMessage = 'Enter the folder path to the new csv file',
             ValueFromPipelineByPropertyName = $true,
             Position = 1
-        )][string]$AttachmentFolder = "C:\temp\ActiveUsersHR"
+        )][string]$AttachmentFolder = "C:\temp\Switch-SurnameWithGivenName"
     )
     begin {
         $AttachmentFolderPathCheck = Test-Path -Path $AttachmentFolder
@@ -34,7 +33,7 @@ function Format-HRRoster {
             # If not present then create the dir
             New-Item -ItemType Directory $AttachmentFolder -Force -ErrorAction Stop
         }
-        $HRCSV = Import-Csv $HRRosterCSV
+        $HRCSV = Import-Csv $RosterCSV
     }
     Process {
         $Export = @()
@@ -47,6 +46,6 @@ function Format-HRRoster {
         }
     }
     end {
-        $Export | Export-Csv "$($home)\Documents\$((Get-Date).ToString("yyyy.MM.dd hh.mm tt")).HRRosterFirstNameSpaceLastName.csv" -NoTypeInformation
+        $Export | Export-Csv "$($home)\Documents\$((Get-Date).ToString("yyyy.MM.dd hh.mm tt")).Switch-SurnameWithGivenName.csv" -NoTypeInformation
     }
 }

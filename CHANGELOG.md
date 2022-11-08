@@ -5,9 +5,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed line 36 of `Switch-SurnameWithGivenName` to `$HRCSV = Import-Csv $RosterCSV`
+
+## [1.8.0] - 2022-11-08
+
+### Removed
+
+- Removed function `Format-HRRoster` to public functions to format roster for compare.
+
 ### Added
 
-- Added function `Format-HRRoster` to public functions to format roster for compare.
+- Renamed function `Format-HRRoster` for clarity to `Switch-SurnameWithGivenName`.
+- Added `Get-NetworkScan` public function to scan subnets for hosts and open ports.
 
 ## [1.6.1] - 2022-07-21
 

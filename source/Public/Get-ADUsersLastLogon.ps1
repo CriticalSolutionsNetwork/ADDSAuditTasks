@@ -1,5 +1,5 @@
 function Get-ADUsersLastLogon {
-<#
+    <#
     .SYNOPSIS
     Takes SamAccountName as input to retrieve most recent LastLogon from all DC's.
     .DESCRIPTION
@@ -12,7 +12,7 @@ function Get-ADUsersLastLogon {
     [CmdletBinding(HelpURI = "https://criticalsolutionsnetwork.github.io/ADDSAuditTasks/#Get-ADUsersLastLogon")]
     [OutputType([datetime])]
     param (
-        [Alias("Identity","UserName","Account")]
+        [Alias("Identity", "UserName", "Account")]
         [Parameter(
             Mandatory = $true,
             HelpMessage = 'Enter the SamAccountName',

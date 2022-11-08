@@ -1,5 +1,5 @@
 function Initialize-AuditBeginBlock {
-<#
+    <#
     .SYNOPSIS
     This is a sample Private function only visible within the module.
 
@@ -16,30 +16,17 @@ function Initialize-AuditBeginBlock {
     [cmdletBinding()]
     [OutputType([string])]
     param(
-        [Parameter(
-            ValueFromPipeline = $true
-        )]
+        [Parameter(ValueFromPipeline = $true)]
         [string]$AttachmentFolderPathBegin = "C:\temp\ADDSAuditTasks",
-        [Parameter(
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(ValueFromPipelineByPropertyName = $true)]
         [string]$ScriptFunctionName,
-        [Parameter(
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(ValueFromPipelineByPropertyName = $true)]
         [bool]$SendEmailMessageBegin,
-        [Parameter(
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(ValueFromPipelineByPropertyName = $true)]
         [bool]$CleanBegin,
-        [Parameter(
-            ValueFromPipelineByPropertyName = $true
-        )]
+        [Parameter(ValueFromPipelineByPropertyName = $true)]
         [bool]$WinSCPBegin
-
     )
-
-
     process {
         # Create Directory Path
         $AttachmentFolderPathCheck = Test-Path -Path $AttachmentFolderPathBegin

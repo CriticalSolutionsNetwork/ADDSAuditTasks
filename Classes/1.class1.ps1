@@ -90,19 +90,19 @@ Get-aduser -Filter { LastLogonTimeStamp -lt $time -and Enabled -eq $true } -Prop
 )
 $AuditArray = @()
 
-foreach ($accountItem in $Export) {
+foreach ($item in $Export) {
     $AuditArray += [ADAuditAccount]::new(
-        $($accountItem.SamAccountName),
-        $($accountItem.GivenName),
-        $($accountItem.Surname),
-        $($accountItem.UserPrincipalName),
-        $($accountItem.LastLogonTimeStamp),
-        $($accountItem.Enabled),
-        $($accountItem.LastLogonTimeStamp),
-        $($accountItem.DistinguishedName),
-        $($accountItem.Title),
-        $($accountItem.Manager),
-        $($accountItem.Department),
+        $($item.SamAccountName),
+        $($item.GivenName),
+        $($item.Surname),
+        $($item.UserPrincipalName),
+        $($item.LastLogonTimeStamp),
+        $($item.Enabled),
+        $($item.LastLogonTimeStamp),
+        $($item.DistinguishedName),
+        $($item.Title),
+        $($item.Manager),
+        $($item.Department),
         'False',
         'False'
     )
