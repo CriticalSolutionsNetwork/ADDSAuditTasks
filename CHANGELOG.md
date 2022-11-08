@@ -5,9 +5,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Removed function `Format-HRRoster` to public functions to format roster for compare.
+
 ### Added
 
-- Added function `Format-HRRoster` to public functions to format roster for compare.
+- Renamed function `Format-HRRoster` for clarity to `Switch-SurnameWithGivenName`.
+- Added `Get-NetworkScan` public function to scan subnets for hosts and open ports.
 
 ## [1.6.1] - 2022-07-21
 

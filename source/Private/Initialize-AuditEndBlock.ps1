@@ -131,7 +131,7 @@ function Initialize-AuditEndBlock {
                 Submit-FTPUpload -FTPUserName $UserNameEnd -Password $Password `
                     -FTPHostName $FTPHostEnd -LocalFilePath ($ZipEnd).Split(" ") -SshHostKeyFingerprint $SshHostKeyFingerprintEnd -RemoteFTPPath $RemotePathEnd -ErrorVariable SubmitFTPErr
                 if ($?) {
-                    Write-TSLog  "The ADDSAuditTask archive have been uploaded to ftp."
+                    Write-TSLog  "The ADDSAuditTask archive has been uploaded to ftp."
                     Write-TSLog -End
                     Write-TSLog -LogOutputPath $LogOutputPath
                 }
@@ -141,7 +141,7 @@ function Initialize-AuditEndBlock {
             }
             elseif ($LocalDiskEnd) {
                 #Confirm output path to console.
-                Write-TSLog  "The ADDSAuditTask archive have been saved to: "
+                Write-TSLog  "The ADDSAuditTask archive has been saved to: "
                 Write-TSLog  "$ZipEnd"
                 Write-TSLog -End
                 Write-TSLog -LogOutputPath $LogOutputPath

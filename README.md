@@ -281,13 +281,13 @@ Explanation of the function or its result. You can include multiple examples wit
 ### Links
 
  - [Specify a URI to a help page, this will show when Get-Help -Online is used.](#Specify a URI to a help page, this will show when Get-Help -Online is used.)
-## Switch-LastNameWithFirstName
+## Switch-SurnameWithGivenName
 ### Synopsis
 Takes CSV input as "LastName\\<space\>FirstName" and flips it to "Firstname\\<space\>Lastname"
 ### Syntax
 ```powershell
 
-Switch-LastNameWithFirstName [[-RosterCSV] <String>] [[-AttachmentFolder] <String>] [<CommonParameters>]
+Switch-SurnameWithGivenName [[-RosterCSV] <String>] [[-AttachmentFolder] <String>] [<CommonParameters>]
 
 
 
@@ -297,14 +297,14 @@ Switch-LastNameWithFirstName [[-RosterCSV] <String>] [[-AttachmentFolder] <Strin
 | Name  | Alias  | Description | Required? | Pipeline Input | Default Value |
 | - | - | - | - | - | - |
 | <nobr>RosterCSV</nobr> |  |  | false | true \(ByValue, ByPropertyName\) |  |
-| <nobr>AttachmentFolder</nobr> |  |  | false | true \(ByPropertyName\) | C:\\temp\\Switch-LastNameFirstName |
+| <nobr>AttachmentFolder</nobr> |  |  | false | true \(ByPropertyName\) | C:\\temp\\Switch-SurnameWithGivenName |
 ### Note
 This function depends on the name column in the employee roster name column, to have been formatted in excel using a find and replace to replace ", " with " ". In other words: The file needs to have "comma space" replaces with "space" in the name column to be easily compared to ADUser output.
 
 ### Examples
 **EXAMPLE 1**
 ```powershell
-Switch-LastNameWithFirstName -RosterCSV "C:\temp\RosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
+Switch-SurnameWithGivenName -RosterCSV "C:\temp\RosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
 ```
 
 

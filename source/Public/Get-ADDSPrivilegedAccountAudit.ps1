@@ -200,8 +200,6 @@ function Get-ADDSPrivilegedAccountAudit {
             Write-TSLog "End Block last error for log: "
             Write-TSLog -LogError -LogErrorVar InitBeginErr
         }
-
-
     } # End begin
     process {
         if (!($Clean)) {
@@ -237,6 +235,7 @@ function Get-ADDSPrivilegedAccountAudit {
                 $GroupMember | Select-Object SamAccountName, Name, ObjectClass, `
                 @{N = 'PriviledgedGroup'; E = { $group } }, `
                 @{N = 'Enabled'; E = { (Get-ADUser -Identity $_.samaccountname).Enabled } }, `
+                @{N = 'PasswordNeverExpires'; E = { (Get-ADUser -Identity $_.samaccountname -Properties PasswordNeverExpires).PasswordNeverExpires } }, `
                 @{N = "LastSign-in"; E = { [DateTime]::FromFileTime((Get-ADUser -Identity $_.samaccountname -Properties lastLogonTimestamp).lastLogonTimestamp) } }, `
                 @{N = 'LastSeen?'; E = {
                         switch ([DateTime]::FromFileTime((Get-ADUser -Identity $_.samaccountname -Properties lastLogonTimestamp).lastLogonTimestamp)) {
@@ -254,57 +253,78 @@ function Get-ADDSPrivilegedAccountAudit {
                 @{N = 'GroupMemberships'; E = { Get-ADGroupMemberof -SamAccountName $_.samaccountname } }, `
                     Title, `
                 @{N = 'Manager'; E = { (Get-ADUser -Identity $_.manager).Name } }, `
-                    Department, "AccessRequired?", "NeedMailbox?" -OutVariable members | Out-Null
+                @{N = 'SuspectedSvcAccount'; E = {
+                        if (((Get-ADUser -Identity $_.samaccountname -Properties PasswordNeverExpires).PasswordNeverExpires) -or (((Get-ADUser -Identity $_.samaccountname -Properties servicePrincipalName).servicePrincipalName) -ne $null) ) {
+                            return $true
+                        } # end if
+                        else {
+                            return $false
+                        } # end else
+                    }
+                }, # End Named Expression SuspectedSvcAccount
+                Department, "AccessRequired?", "NeedMailbox?" -OutVariable members | Out-Null
                 $ADUsers += $members
             }
             $Export = @()
             # Create $Export Object
             foreach ($User in $ADUsers) {
                 New-Object -TypeName PSCustomObject -Property @{
-                    SamAccountName    = $User.SamAccountName
-                    Name              = $User.Name
-                    PriviledgedGroup  = $User.PriviledgedGroup
-                    Enabled           = $User.Enabled
-                    "LastSign-in"     = $User."LastSign-in"
-                    "LastSeen?"       = $User."LastSeen?"
-                    Title             = $User.Title
-                    Manager           = $User.Manager
-                    Department        = $User.Department
-                    OrgUnit           = $User.OrgUnit
-                    "AccessRequired?" = $User."AccessRequired?"
-                    "NeedMailbox?"    = $User."NeedMailbox?"
-                    ObjectClass       = $User.ObjectClass
-                    GroupMemberships  = $User.GroupMemberships
+                    SamAccountName       = $User.SamAccountName
+                    Name                 = $User.Name
+                    PriviledgedGroup     = $User.PriviledgedGroup
+                    Enabled              = $User.Enabled
+                    PasswordNeverExpires = $User.PasswordNeverExpires
+                    SuspectedSvcAccount  = $User.SuspectedSvcAccount
+                    "LastSign-in"        = $User."LastSign-in"
+                    "LastSeen?"          = $User."LastSeen?"
+                    Title                = $User.Title
+                    Manager              = $User.Manager
+                    Department           = $User.Department
+                    OrgUnit              = $User.OrgUnit
+                    "AccessRequired?"    = $User."AccessRequired?"
+                    "NeedMailbox?"       = $User."NeedMailbox?"
+                    ObjectClass          = $User.ObjectClass
+                    GroupMemberships     = $User.GroupMemberships
                 } -OutVariable PSObject | Out-Null
                 $Export += $PSObject
             }
             # Create filenames
             $csv2 = $csv -replace ".csv", ".ExtendedPermissions.csv"
             $zip2 = $zip -replace ".zip", ".ExtendedPermissions.zip"
+            $csv3 = $csv -replace ".csv", ".PossibleServiceAccounts.csv"
+            $zip3 = $zip -replace ".zip", ".PossibleServiceAccounts.zip"
             # Get PDC
             $dc = (Get-ADDomainController -Discover -DomainName $env:USERDNSDOMAIN -Service PrimaryDC).Name
             # Get DN of AD Root.
             $rootou = (Get-ADRootDSE).defaultNamingContext
             # Get ad objects from the PDC for the root ou. #TODO Check
-            $Allobjects = Get-ADObject -Server $dc -Searchbase $rootou -SearchScope subtree -LDAPFilter `
+            $Allobjects = Get-ADObject -Server $dc -SearchBase $rootou -SearchScope subtree -LDAPFilter `
                 "(&(objectclass=user)(objectcategory=person))" -Properties ntSecurityDescriptor -ResultSetSize $null
             # "(|(objectClass=domain)(objectClass=organizationalUnit)(objectClass=group)(sAMAccountType=805306368)(objectCategory=Computer)(&(objectclass=user)(objectcategory=person)))"
             # Create $Export2 Object
             $Export2 = Foreach ($ADObject in $Allobjects) {
                 Get-AdExtendedRight $ADObject
             }
+            # Export Delegated access, allowed protocols and Destination Serivces.
+            $Export3 = Get-ADObject -Filter { (msDS-AllowedToDelegateTo -like '*') -or (UserAccountControl -band 0x0080000) -or (UserAccountControl -band 0x1000000) } `
+                -prop samAccountName, msDS-AllowedToDelegateTo, servicePrincipalName, userAccountControl | `
+                Select-Object DistinguishedName, ObjectClass, samAccountName, servicePrincipalName, `
+            @{name = 'DelegationStatus'; expression = { if ($_.UserAccountControl -band 0x80000) { 'AllServices' }else { 'SpecificServices' } } }, `
+            @{name = 'AllowedProtocols'; expression = { if ($_.UserAccountControl -band 0x1000000) { 'Any' }else { 'Kerberos' } } }, `
+            @{name = 'DestinationServices'; expression = { $_.'msDS-AllowedToDelegateTo' } }
             # Try first export.
             Export-AuditCSVtoZip -Exported $Export -CSVName $csv -ZipName $zip -ErrorVariable ExportAuditCSVZipErr
             # Try second export.
             Export-AuditCSVtoZip -Exported $Export2 -CSVName $csv2 -ZipName $zip2 -ErrorVariable ExportAuditCSVZipErr2
+            # try third export
+            Export-AuditCSVtoZip -Exported $Export3 -CSVName $csv3 -ZipName $zip3 -ErrorVariable ExportAuditCSVZipErr3
         } # End If
     } # End process
     End {
-
         try {
             Initialize-AuditEndBlock -SendEmailMessageEnd $SendMailMessage -WinSCPEnd $WinSCP -FTPHostend $FTPHost -SshHostKeyFingerprintEnd $SshHostKeyFingerprint -SmtpServerEnd $SMTPServer -PortEnd $Port -UserNameEnd $UserName -FromEnd $From -ToEnd $To `
                 -AttachmentFolderPathEnd $AttachmentFolderPath -Password $Password -FunctionEnd $function -FunctionAppEnd $FunctionApp `
-                -ApiTokenEnd $ApiToken -ZipEnd $zip, $zip2 -RemotePathEnd $RemotePath -LocalDiskEnd $LocalDisk -CleanEnd $Clean -ErrorVariable InitEndErr
+                -ApiTokenEnd $ApiToken -ZipEnd $zip, $zip2, $zip3 -RemotePathEnd $RemotePath -LocalDiskEnd $LocalDisk -CleanEnd $Clean -ErrorVariable InitEndErr
         }
         catch {
             Write-TSLog "End Block last error for log: "

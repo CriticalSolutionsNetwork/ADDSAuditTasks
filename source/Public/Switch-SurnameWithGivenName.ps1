@@ -1,4 +1,4 @@
-function Switch-LastNameWithFirstName {
+function Switch-SurnameWithGivenName {
     <#
     .SYNOPSIS
         Takes CSV input as "LastName<space>FirstName" and flips it to "Firstname<space>Lastname"
@@ -10,7 +10,7 @@ function Switch-LastNameWithFirstName {
     .LINK
         Specify a URI to a help page, this will show when Get-Help -Online is used.
     .EXAMPLE
-        Switch-LastNameWithFirstName -RosterCSV "C:\temp\RosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
+        Switch-SurnameWithGivenName -RosterCSV "C:\temp\RosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
     #>
     [CmdletBinding()]
     param (
@@ -25,7 +25,7 @@ function Switch-LastNameWithFirstName {
             HelpMessage = 'Enter the folder path to the new csv file',
             ValueFromPipelineByPropertyName = $true,
             Position = 1
-        )][string]$AttachmentFolder = "C:\temp\Switch-LastNameFirstName"
+        )][string]$AttachmentFolder = "C:\temp\Switch-SurnameWithGivenName"
     )
     begin {
         $AttachmentFolderPathCheck = Test-Path -Path $AttachmentFolder
@@ -46,6 +46,6 @@ function Switch-LastNameWithFirstName {
         }
     }
     end {
-        $Export | Export-Csv "$($home)\Documents\$((Get-Date).ToString("yyyy.MM.dd hh.mm tt")).HRRosterFirstNameSpaceLastName.csv" -NoTypeInformation
+        $Export | Export-Csv "$($home)\Documents\$((Get-Date).ToString("yyyy.MM.dd hh.mm tt")).Switch-SurnameWithGivenName.csv" -NoTypeInformation
     }
 }
