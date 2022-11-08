@@ -1,4 +1,4 @@
-function Format-HRRoster {
+function Switch-LastNameWithFirstName {
     <#
     .SYNOPSIS
         Takes CSV input as "LastName<space>FirstName" and flips it to "Firstname<space>Lastname"
@@ -10,8 +10,7 @@ function Format-HRRoster {
     .LINK
         Specify a URI to a help page, this will show when Get-Help -Online is used.
     .EXAMPLE
-        Format-HRRoster -HRRosterCSV "C:\temp\HRRosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
-        Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
+        Switch-LastNameWithFirstName -RosterCSV "C:\temp\RosterNameColumnFormattedLastNameSpaceFirstname.csv" -Verbose
     #>
     [CmdletBinding()]
     param (
@@ -21,12 +20,12 @@ function Format-HRRoster {
             ValueFromPipelineByPropertyName = $true,
             Position = 0
         )]
-        [string]$HRRosterCSV,
+        [string]$RosterCSV,
         [Parameter(
             HelpMessage = 'Enter the folder path to the new csv file',
             ValueFromPipelineByPropertyName = $true,
             Position = 1
-        )][string]$AttachmentFolder = "C:\temp\ActiveUsersHR"
+        )][string]$AttachmentFolder = "C:\temp\Switch-LastNameFirstName"
     )
     begin {
         $AttachmentFolderPathCheck = Test-Path -Path $AttachmentFolder
