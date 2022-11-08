@@ -33,7 +33,7 @@ function Switch-SurnameWithGivenName {
             # If not present then create the dir
             New-Item -ItemType Directory $AttachmentFolder -Force -ErrorAction Stop
         }
-        $HRCSV = Import-Csv $HRRosterCSV
+        $HRCSV = Import-Csv $RosterCSV
     }
     Process {
         $Export = @()
