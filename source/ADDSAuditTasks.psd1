@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.9.0'
+    ModuleVersion     = '1.9.2'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -108,11 +108,12 @@
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.9.0] - 2022-11-08
+            ReleaseNotes = '## [1.9.2] - 2022-11-08
 
 ### Fixed
 
-- Fixed line 36 of `Switch-SurnameWithGivenName` to `$HRCSV = Import-Csv $RosterCSV`
+- Fixed ordered hashtable in departed users audit.
+- Fixed service principal name output.
 
 '
 
