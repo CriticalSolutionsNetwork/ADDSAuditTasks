@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.7.1'
+    ModuleVersion     = '1.9.2'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Get-ADDSActiveAccountAudit','Get-ADDSDepartedUsersAccountAudit','Get-ADDSPrivilegedAccountAudit','Get-ADUsersLastLogon')
+    FunctionsToExport = @('Get-ADDSActiveAccountAudit','Get-ADDSDepartedUsersAccountAudit','Get-ADDSPrivilegedAccountAudit','Get-ADUsersLastLogon','Get-NetworkScan','Switch-SurnameWithGivenName')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport   = @()
@@ -108,11 +108,12 @@
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.6.0] - 2022-07-21
+            ReleaseNotes = '## [1.9.2] - 2022-11-08
 
-### Added
+### Fixed
 
-- Added Name parameter to `Get-ADDSActiveUsersAudit` and `Get-ADDSDepartedUsersAudit`
+- Fixed ordered hashtable in departed users audit.
+- Fixed service principal name output.
 
 '
 
