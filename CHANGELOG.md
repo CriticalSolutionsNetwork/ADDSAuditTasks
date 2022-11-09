@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixed ordered hashtable in departed users audit.
+- Fixed service principal name output.
+
+## [1.9.0] - 2022-11-08
+
+### Fixed
+
 - Fixed line 36 of `Switch-SurnameWithGivenName` to `$HRCSV = Import-Csv $RosterCSV`
 
 ## [1.8.0] - 2022-11-08

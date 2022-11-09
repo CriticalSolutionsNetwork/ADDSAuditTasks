@@ -236,8 +236,8 @@ function Get-ADDSPrivilegedAccountAudit {
                 @{N = 'PriviledgedGroup'; E = { $group } }, `
                 @{N = 'Enabled'; E = { (Get-ADUser -Identity $_.samaccountname).Enabled } }, `
                 @{N = 'PasswordNeverExpires'; E = { (Get-ADUser -Identity $_.samaccountname -Properties PasswordNeverExpires).PasswordNeverExpires } }, `
-                @{N = "LastSign-in"; E = { [DateTime]::FromFileTime((Get-ADUser -Identity $_.samaccountname -Properties lastLogonTimestamp).lastLogonTimestamp) } }, `
-                @{N = 'LastSeen?'; E = {
+                @{N = 'LastLogin'; E = { [DateTime]::FromFileTime((Get-ADUser -Identity $_.samaccountname -Properties lastLogonTimestamp).lastLogonTimestamp) } }, `
+                @{N = 'LastSeen'; E = {
                         switch ([DateTime]::FromFileTime((Get-ADUser -Identity $_.samaccountname -Properties lastLogonTimestamp).lastLogonTimestamp)) {
                             # Over 90 Days
                             { ($_ -lt $time90) } { '3+ months'; break }
@@ -262,30 +262,31 @@ function Get-ADDSPrivilegedAccountAudit {
                         } # end else
                     }
                 }, # End Named Expression SuspectedSvcAccount
-                Department, "AccessRequired?", "NeedMailbox?" -OutVariable members | Out-Null
+                Department, AccessRequired, NeedMailbox -OutVariable members | Out-Null
                 $ADUsers += $members
             }
             $Export = @()
             # Create $Export Object
             foreach ($User in $ADUsers) {
-                New-Object -TypeName PSCustomObject -Property @{
+                $hash = [ordered]@{
+                    PriviledgedGroup     = $User.PriviledgedGroup
                     SamAccountName       = $User.SamAccountName
                     Name                 = $User.Name
-                    PriviledgedGroup     = $User.PriviledgedGroup
-                    Enabled              = $User.Enabled
-                    PasswordNeverExpires = $User.PasswordNeverExpires
-                    SuspectedSvcAccount  = $User.SuspectedSvcAccount
-                    "LastSign-in"        = $User."LastSign-in"
-                    "LastSeen?"          = $User."LastSeen?"
+                    ObjectClass          = $User.ObjectClass
+                    LastLogin            = $User.LastLogin
+                    LastSeen             = $User.LastSeen
+                    GroupMemberships     = $User.GroupMemberships
                     Title                = $User.Title
                     Manager              = $User.Manager
                     Department           = $User.Department
                     OrgUnit              = $User.OrgUnit
-                    "AccessRequired?"    = $User."AccessRequired?"
-                    "NeedMailbox?"       = $User."NeedMailbox?"
-                    ObjectClass          = $User.ObjectClass
-                    GroupMemberships     = $User.GroupMemberships
-                } -OutVariable PSObject | Out-Null
+                    Enabled              = $User.Enabled
+                    PasswordNeverExpires = $User.PasswordNeverExpires
+                    SuspectedSvcAccount  = $User.SuspectedSvcAccount
+                    AccessRequired       = $false
+                    NeedMailbox          = $true
+                }
+                New-Object -TypeName PSCustomObject -Property $hash -OutVariable PSObject | Out-Null
                 $Export += $PSObject
             }
             # Create filenames
@@ -308,10 +309,11 @@ function Get-ADDSPrivilegedAccountAudit {
             # Export Delegated access, allowed protocols and Destination Serivces.
             $Export3 = Get-ADObject -Filter { (msDS-AllowedToDelegateTo -like '*') -or (UserAccountControl -band 0x0080000) -or (UserAccountControl -band 0x1000000) } `
                 -prop samAccountName, msDS-AllowedToDelegateTo, servicePrincipalName, userAccountControl | `
-                Select-Object DistinguishedName, ObjectClass, samAccountName, servicePrincipalName, `
-            @{name = 'DelegationStatus'; expression = { if ($_.UserAccountControl -band 0x80000) { 'AllServices' }else { 'SpecificServices' } } }, `
-            @{name = 'AllowedProtocols'; expression = { if ($_.UserAccountControl -band 0x1000000) { 'Any' }else { 'Kerberos' } } }, `
-            @{name = 'DestinationServices'; expression = { $_.'msDS-AllowedToDelegateTo' } }
+                Select-Object DistinguishedName, ObjectClass, samAccountName, `
+            @{N = 'servicePrincipalName'; E = { $_.servicePrincipalName -join " | " } }, `
+            @{N = 'DelegationStatus'; E = { if ($_.UserAccountControl -band 0x80000) { 'AllServices' }else { 'SpecificServices' } } }, `
+            @{N = 'AllowedProtocols'; E = { if ($_.UserAccountControl -band 0x1000000) { 'Any' }else { 'Kerberos' } } }, `
+            @{N = 'DestinationServices'; E = { $_.'msDS-AllowedToDelegateTo' } }
             # Try first export.
             Export-AuditCSVtoZip -Exported $Export -CSVName $csv -ZipName $zip -ErrorVariable ExportAuditCSVZipErr
             # Try second export.
