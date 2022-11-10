@@ -24,7 +24,7 @@ function Get-NetworkScan {
     .PARAMETER Report
         Specify this switch if you would like a report generated in C:\temp.
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
         [Parameter(
             ValueFromPipelineByPropertyName = $true,
@@ -32,6 +32,22 @@ function Get-NetworkScan {
         )]
         [ValidateRange(1, 65535)]
         [int[]]$Ports,
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'Default',
+            HelpMessage = 'Automatically find and scan local attached subnets',
+            ValueFromPipelineByPropertyName = $true,
+            Position = 1
+        )]
+        [switch]$LocalSubnets,
+        [Parameter(
+            Mandatory = $true,
+            ParameterSetName = 'Computers',
+            HelpMessage = 'Scan host or array of hosts using Subet ID in CIDR Notation, IP, NETBIOS, or FQDN in "quotes"',
+            ValueFromPipelineByPropertyName = $true,
+            Position = 1
+        )]
+        [string[]]$Computers,
         [switch]$Report
     )
     begin {
@@ -44,34 +60,43 @@ function Get-NetworkScan {
         }
     } # Begin Close
     process {
-        $ConnectedNetworks = Get-NetIPConfiguration -Detailed | Where-Object { $_.Netadapter.status -eq "up" }
-        $results = @()
-        foreach ($network in $ConnectedNetworks) {
-            # Get Network DHCP Server
-            $DHCPServer = (Get-CimInstance -ClassName Win32_NetworkAdapterConfiguration | Where-Object { $_.IPAddress -eq $network.IPv4Address }).DHCPServer
-            # Get Subnet as CIDR
-            $Subnet = "$($network.IPv4DefaultGateway.nexthop)/$($network.IPv4Address.PrefixLength)"
-            # Regex for IPV4 and IPV6 validation
-            if (($subnet -match '^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$') -or ($subnet -match '^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$')) {
-                # Create Network Scan Object
-                $NetWorkScan = Invoke-PSnmap -ComputerName $subnet -Port $ports -Dns -NoSummary -AddService
-                # Filter devices that don't ping as no results will be found.
-                $scan = $NetworkScan | Where-Object { $_.Ping -eq $true }
-                Write-Output "##########################################"
-                Write-Output "Network scan for Subnet $Subnet completed."
-                Write-Output "DHCP Server: $($DHCPServer)"
-                Write-Output "Gateway: $($network.IPv4DefaultGateway.nexthop)"
-                Write-Output "##########################################"
-                # Normalize Subnet text for filename.
-                $subnetText = $(($subnet.Replace("/", ".CIDR.")))
-                # If report switch is true.
-                if ($report) {
-                    $scan | Export-Csv "C:\temp\$((Get-Date).ToString('yyyy-MM-dd_hh.mm.ss')).$($env:USERDNSDOMAIN)_Subnet.$($subnetText)_DHCP.$($DHCPServer)_Gateway.$($network.IPv4DefaultGateway.nexthop).NetScan.csv" -NoTypeInformation
-                }
-                # Add scan to function output.
-                $results += $scan
-            } # IF Subnet Match End
-        } # End Foreach
+        if ($LocalSubnets) {
+            $ConnectedNetworks = Get-NetIPConfiguration -Detailed | Where-Object { $_.Netadapter.status -eq "up" }
+            $results = @()
+            foreach ($network in $ConnectedNetworks) {
+                # Get Network DHCP Server
+                $DHCPServer = (Get-CimInstance -ClassName Win32_NetworkAdapterConfiguration | Where-Object { $_.IPAddress -eq $network.IPv4Address }).DHCPServer
+                # Get Subnet as CIDR
+                $Subnet = "$($network.IPv4DefaultGateway.nexthop)/$($network.IPv4Address.PrefixLength)"
+                # Regex for IPV4 and IPV6 validation
+                if (($subnet -match '^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$') -or ($subnet -match '^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$')) {
+                    # Create Network Scan Object
+                    $NetWorkScan = Invoke-PSnmap -ComputerName $subnet -Port $ports -Dns -NoSummary -AddService
+                    # Filter devices that don't ping as no results will be found.
+                    $scan = $NetworkScan | Where-Object { $_.Ping -eq $true }
+                    Write-Output "##########################################"
+                    Write-Output "Network scan for Subnet $Subnet completed."
+                    Write-Output "DHCP Server: $($DHCPServer)"
+                    Write-Output "Gateway: $($network.IPv4DefaultGateway.nexthop)"
+                    Write-Output "##########################################"
+                    # Normalize Subnet text for filename.
+                    $subnetText = $(($subnet.Replace("/", ".CIDR.")))
+                    # If report switch is true.
+                    if ($report) {
+                        $scan | Export-Csv "C:\temp\$((Get-Date).ToString('yyyy-MM-dd_hh.mm.ss')).$($env:USERDNSDOMAIN)_Subnet.$($subnetText)_DHCP.$($DHCPServer)_Gateway.$($network.IPv4DefaultGateway.nexthop).NetScan.csv" -NoTypeInformation
+                    }
+                    # Add scan to function output.
+                    $results += $scan
+                } # IF Subnet Match End
+            } # End Foreach
+        } # End If $LocalSubnets
+        elseif ($Computers) {
+            $Subnet = $Computers
+            $results = Invoke-PSnmap -ComputerName $subnet -Port $ports -Dns -NoSummary -AddService | Where-Object { $_.Ping -eq $true }
+            if ($Report) {
+                $results | Export-Csv "C:\temp\$((Get-Date).ToString('yyyy-MM-dd_hh.mm.ss')).$($env:USERDNSDOMAIN)_HostScan.csv" -NoTypeInformation
+            }
+        }
     } # Process Close
     end {
         return $results
