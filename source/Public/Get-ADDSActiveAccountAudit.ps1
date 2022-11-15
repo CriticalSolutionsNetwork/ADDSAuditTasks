@@ -237,7 +237,6 @@ function Get-ADDSActiveAccountAudit {
         if (!($Clean)) {
             # Establish timeframe to review.
             $time = (Get-Date).Adddays( - ($DaysInactive))
-
             # Add Datetime to filename
             $csvFileName = "$AttachmentFolderPath\$((Get-Date).ToString('yyyy-MM-dd_hh.mm.ss'))_$($ScriptFunctionName)_$($env:USERDNSDOMAIN)"
             # Create FileNames
@@ -245,13 +244,11 @@ function Get-ADDSActiveAccountAudit {
             $zip = "$csvFileName.zip"
             Write-TSLog "Searching for users who have not signed in within the last $DaysInactive days, where parameter Enabled = $Enabled"
             # Audit Script with export to csv and zip. Paramters for Manager, lastLogonTimestamp and DistinguishedName normalized.
-
             # GetActiveUsers
             Get-aduser -Filter { LastLogonTimeStamp -lt $time -and Enabled -eq $Enabled } -Properties `
                 samaccountname, GivenName, Surname, Name, UserPrincipalName, lastlogontimestamp, DistinguishedName, `
                 Title, Enabled, Description, Manager, Department -OutVariable ADExport
             $Export = @()
-
             foreach ($item in $ADExport) {
                 $Export += [ADAuditAccount]::new(
                     $($item.SamAccountName),
@@ -270,32 +267,6 @@ function Get-ADDSActiveAccountAudit {
                     $false
                 )
             }
-            <#
-            | Select-Object `
-            @{N = 'UserName'; E = { $_.samaccountname } }, `
-            @{N = 'FirstName'; E = { $_.GivenName } }, `
-            @{N = 'LastName'; E = { $_.Surname } }, `
-            @{N = 'UPN'; E = { $_.UserPrincipalName } }, `
-            @{N = "Last Sign-in"; E = { ([DateTime]::FromFileTime($_.lastLogonTimestamp)) } }, `
-                Enabled, `
-            @{N = 'Last Seen?'; `
-                    E = {
-                    switch (([DateTime]::FromFileTime($_.lastLogonTimestamp))) {
-                            # Over 90 Days
-                            { ($_ -lt $time90) } { '3+ months'; break }
-                            # Over 60 Days
-                            { ($_ -lt $time60) } { '2+ months'; break }
-                            # Over 90 Days
-                            { ($_ -lt $time30) } { '1+ month'; break }
-                        default { 'Recently' }
-                    }
-                }
-            }, `
-            @{N = 'OrgUnit'; E = { $_.DistinguishedName -replace '^.*?,(?=[A-Z]{2}=)' } }, `
-                Title, `
-                @{N = 'Manager'; E = { (Get-ADUser -Identity $_.manager).Name } }, `
-                Department, "Access Required?", "Need Mailbox?" -OutVariable Export -ErrorVariable ExportErr | Out-Null
-                #>
             try {
                 Export-AuditCSVtoZip -Exportobject $Export -csv $csv -zip $zip -ErrorAction Stop -ErrorVariable ExportAuditCSVZipErr
             }

@@ -14,7 +14,6 @@ function Export-AuditCSVtoZip {
         else {
             $membertype = "Property"
         }
-
         Write-TSLog "The $($script:MyInvocation.MyCommand.Name -replace '\..*') Export was successful. There are $($ExportObject.Count) objects listed with the following properties: "
             ($ExportObject | Get-Member -MemberType $membertype ).Name | Write-TSLog
         Write-TSLog "Exporting CSV to path: $CSVName"

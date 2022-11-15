@@ -3,17 +3,12 @@ function Send-AuditEmail {
     .SYNOPSIS
     This is a sample Private function only visible within the module. It uses Send-MailkitMessage
     To send email messages.
-
-
     .DESCRIPTION
     This sample function is not exported to the module and only return the data passed as parameter.
-
     .EXAMPLE
     Send-AuditEmail -smtpServer $SMTPServer -port $Port -username $Username -Function $Function -FunctionApp $FunctionApp -token $ApiToken -from $from -to $to -attachmentfilePath "$FilePath" -ssl
-
     .PARAMETER PrivateData
     The PrivateData parameter is what will be returned without transformation.
-
     #>
     param (
         [string]$smtpServer,
@@ -39,7 +34,6 @@ function Send-AuditEmail {
     foreach ($currentItem in $attachmentfiles) {
         $AttachmentList.Add("$currentItem")
     }
-
     # From
     $from = [MimeKit.MailboxAddress]$from
     # Mail Account variable

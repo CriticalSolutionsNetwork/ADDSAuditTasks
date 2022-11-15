@@ -207,7 +207,6 @@ function Get-ADDSDepartedUsersAccountAudit {
             Write-TSLog "End Block last error for log: "
             Write-TSLog -LogError -LogErrorVar InitBeginErr
         }
-
     }
     process {
         if (!($Clean)) {
@@ -220,12 +219,11 @@ function Get-ADDSDepartedUsersAccountAudit {
             # Audit Script with export to csv and zip.
             # Get ad user with Name String Filter
             $WildCardIdentifierstring = '*' + $WildCardIdentifier + '*'
-            Get-aduser -Filter { Name -like $WildCardIdentifierstring } -Properties `
+            Get-ADUser -Filter { Name -like $WildCardIdentifierstring } -Properties `
                 samaccountname, GivenName, Surname, Name, UserPrincipalName, lastlogontimestamp, DistinguishedName, `
                 Title, Enabled, Description, Manager, Department `
                 -OutVariable ADExport | Out-Null
             $Export = @()
-
             foreach ($item in $ADExport) {
                 $Export += [ADAuditAccount]::new(
                     $($item.SamAccountName),
@@ -244,7 +242,6 @@ function Get-ADDSDepartedUsersAccountAudit {
                     $false
                 )
             }
-
             try {
                 Export-AuditCSVtoZip -Exportobject $Export -csv $csv -zip $zip -ErrorAction Stop -ErrorVariable ExportAuditCSVZipErr
             }

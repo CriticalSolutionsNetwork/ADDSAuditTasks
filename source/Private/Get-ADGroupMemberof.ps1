@@ -4,7 +4,7 @@ function Get-ADGroupMemberof {
         [string]$SamAccountName
     )
     process {
-        $GroupStringArray = ((Get-ADuser -Identity $SamAccountName -Properties memberof).memberof | Get-ADGroup | Select-Object name | Sort-Object name).name
+        $GroupStringArray = ((Get-ADUser -Identity $SamAccountName -Properties memberof).memberof | Get-ADGroup | Select-Object name | Sort-Object name).name
         $GroupString = $GroupStringArray -join " | "
         return $GroupString
     }

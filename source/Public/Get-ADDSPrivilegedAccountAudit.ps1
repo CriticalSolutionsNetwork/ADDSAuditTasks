@@ -261,7 +261,7 @@ function Get-ADDSPrivilegedAccountAudit {
                         else {
                             return $false
                         } # end else
-                    }
+                    } # End Expression
                 }, # End Named Expression SuspectedSvcAccount
                 Department, AccessRequired, NeedMailbox -OutVariable members | Out-Null
                 $ADUsers += $members
