@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.4] - 2022-11-17
+
 ### Fixed
 
 - Formatting in various modules. No function changes.
