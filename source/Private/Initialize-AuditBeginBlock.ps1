@@ -93,7 +93,6 @@ function Initialize-AuditBeginBlock {
             }
         }
         # If SendMailMessage
-
         return $LogOutputPath
     }
 }

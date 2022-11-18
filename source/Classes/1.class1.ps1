@@ -14,7 +14,7 @@ class ADAuditAccount {
     [bool]$AccessRequired
     [bool]$NeedMailbox
     # Constructor 1
-    ADAuditAccount([string]$UserName){
+    ADAuditAccount([string]$UserName) {
         $this.UserName = $UserName
         $this.AccessRequired = $false
         $this.NeedMailBox = $false
@@ -67,61 +67,3 @@ class ADAuditAccount {
         $this.NeedMailbox = $NeedMailbox
     }
 }
-
-# End Class ADExport
-
-<#
-enum DeviceType {
-    Undefined = 0
-    Compute = 1
-    Storage = 2
-    Networking = 4
-    Communications = 8
-    Power = 16
-    Rack = 32
-}
-$Enabled = $true
-[int]$DaysInactive = '90'
-$time = (Get-Date).Adddays( - ($DaysInactive))
-Get-aduser -Filter { LastLogonTimeStamp -lt $time -and Enabled -eq $true } -Properties `
-    GivenName, Surname, Mail, UserPrincipalName, Title, `
-    Description, Manager, lastlogontimestamp, samaccountname, DistinguishedName, Department -OutVariable Export
-[ADAuditAccount]$ADDSAuditAccount = [ADAuditAccount]::new(
-    $($Export[0].SamAccountName),
-    $($Export[0].GivenName),
-    $($Export[0].Surname),
-    $($Export[0].UserPrincipalName),
-    $($Export[0].LastLogonTimeStamp),
-    $($Export[0].Enabled),
-    $($Export[0].LastLogonTimeStamp),
-    $($Export[0].DistinguishedName),
-    $($Export[0].Title),
-    $($Export[0].Manager),
-    $($Export[0].Department),
-    'False',
-    'False'
-)
-$AuditArray = @()
-
-foreach ($item in $Export) {
-    $AuditArray += [ADAuditAccount]::new(
-        $($item.SamAccountName),
-        $($item.GivenName),
-        $($item.Surname),
-        $($item.UserPrincipalName),
-        $($item.LastLogonTimeStamp),
-        $($item.Enabled),
-        $($item.LastLogonTimeStamp),
-        $($item.DistinguishedName),
-        $($item.Title),
-        $($item.Manager),
-        $($item.Department),
-        'False',
-        'False'
-    )
-}
-
-$ADDSAuditAccount
-
-Write-Output $ADDSExport
-#>

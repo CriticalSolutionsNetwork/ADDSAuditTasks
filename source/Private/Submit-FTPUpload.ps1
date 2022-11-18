@@ -3,20 +3,14 @@ function Submit-FTPUpload {
     param (
         [string]$FTPUserName,
         [securestring]$Password,
-        # New-WinSCPSessionOption
         [string]$FTPHostName,
         [ValidateSet("Sftp", "SCP", "FTP", "Webdav", "s3")]
-        # New-WinSCPSessionOption
         [string]$Protocol = "Sftp",
         [ValidateSet("None", "Implicit ", "Explicit")]
-        # New-WinSCPSessionOption
         [string]$FTPSecure = "None",
-        # New-WinSCPSessionOption
         #[int]$FTPPort = 0,
-        # New-WinSCPSessionOption
         # Mandatory with SFTP/SCP
         [string[]]$SshHostKeyFingerprint,
-        # New-WinSCPSessionOption
         #[string]$SshPrivateKeyPath,
         [string[]]$LocalFilePath,
         # Send-WinSCPItem
@@ -37,7 +31,6 @@ function Submit-FTPUpload {
         if (!(Test-WinSCPPath -Path $RemoteFTPPath -WinSCPSession $WinSCPSession)) {
             New-WinSCPItem -Path $RemoteFTPPath -ItemType Directory -WinSCPSession $WinSCPSession
         }
-        $sendvararray
         # Upload a file to the directory.
         $errorindex = 0
         foreach ($File in $LocalFilePath) {

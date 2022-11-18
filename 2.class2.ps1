@@ -18,7 +18,6 @@ class ADUserTest {
     [string]$Modified
     [string]$LastBadPasswordAttempt
     [string]$PasswordLastSet
-
     # Constructor
     ADUserTest ([string] $Username) {
         $this.Username = $Username
@@ -43,7 +42,7 @@ class ADUserTest {
             'Title'
         )
         try {
-            $P = Get-ADUser $Username -Properties $Properties | Select-Object $Properties
+            $P = Get-ADUser -Identity $Username -Properties $Properties | Select-Object $Properties
             $Properties | ForEach-Object {
                 $this.$_ = $P.$_
             }
@@ -53,3 +52,4 @@ class ADUserTest {
         }
     }
 }
+$doug = [ADusertest]::new('dougrios')

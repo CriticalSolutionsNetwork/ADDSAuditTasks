@@ -254,13 +254,14 @@ function Get-ADDSPrivilegedAccountAudit {
                     Title, `
                 @{N = 'Manager'; E = { (Get-ADUser -Identity $_.manager).Name } }, `
                 @{N = 'SuspectedSvcAccount'; E = {
+                        # Null gave unexpected behavior on the left side. Works on the right side.
                         if (((Get-ADUser -Identity $_.samaccountname -Properties PasswordNeverExpires).PasswordNeverExpires) -or (((Get-ADUser -Identity $_.samaccountname -Properties servicePrincipalName).servicePrincipalName) -ne $null) ) {
                             return $true
                         } # end if
                         else {
                             return $false
                         } # end else
-                    }
+                    } # End Expression
                 }, # End Named Expression SuspectedSvcAccount
                 Department, AccessRequired, NeedMailbox -OutVariable members | Out-Null
                 $ADUsers += $members

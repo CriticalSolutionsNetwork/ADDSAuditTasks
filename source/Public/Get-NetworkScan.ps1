@@ -11,7 +11,6 @@ function Get-NetworkScan {
         Specify a URI to a help page, this will show when Get-Help -Online is used.
     .EXAMPLE
         Get-NetworkScan -report
-        Explanation of the function or its result. You can include multiple examples with additional .EXAMPLE lines
     .PARAMETER Ports
         Default ports are:
         "21", "22", "25", "53", "67", "68", "80", "443", `
@@ -20,7 +19,7 @@ function Get-NetworkScan {
         "3268", "3269", "3389", "5985", "5986"
 
         If you want to supply a port, do so as an integer or an array of integers.
-        "22","80","443",etc.
+        "22","80","443", etc.
     .PARAMETER Report
         Specify this switch if you would like a report generated in C:\temp.
     #>
