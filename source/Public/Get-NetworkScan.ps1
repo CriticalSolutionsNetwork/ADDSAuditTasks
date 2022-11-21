@@ -13,7 +13,7 @@ function Get-NetworkScan {
         Get-NetworkScan -report
     .PARAMETER Ports
         Default ports are:
-        "21", "22", "25", "53", "67", "68", "80", "443", `
+        "21", "22", "23", "25", "53", "67", "68", "80", "443", `
         "88", "464", "123", "135", "137", "138", "139", `
         "445", "389", "636", "514", "587", "1701", `
         "3268", "3269", "3389", "5985", "5986"
@@ -52,7 +52,7 @@ function Get-NetworkScan {
     begin {
         If (Get-Module -ListAvailable -Name "PSnmap") { Import-Module "PSnmap" } Else { Install-Module "PSnmap" -Force; Import-Module "PSnmap" }
         if (!($ports)) {
-            [int[]]$ports = "21", "22", "25", "53", "67", "68", "80", "443", `
+            [int[]]$ports = "21", "22", "23", "25", "53", "67", "68", "80", "443", `
                 "88", "464", "123", "135", "137", "138", "139", `
                 "445", "389", "636", "514", "587", "1701", `
                 "3268", "3269", "3389", "5985", "5986"
