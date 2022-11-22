@@ -57,7 +57,7 @@ function Get-NetworkScan {
                 "445", "389", "636", "514", "587", "1701", `
                 "3268", "3269", "3389", "5985", "5986"
         }
-        $ouiobject= invoke-restmethod https://standards-oui.ieee.org/oui/oui.csv | ConvertFrom-Csv
+        $ouiobject = Invoke-RestMethod https://standards-oui.ieee.org/oui/oui.csv | ConvertFrom-Csv
     } # Begin Close
     process {
         if ($LocalSubnets) {
@@ -79,6 +79,14 @@ function Get-NetworkScan {
                     Write-Output "DHCP Server: $($DHCPServer)"
                     Write-Output "Gateway: $($network.IPv4DefaultGateway.nexthop)"
                     Write-Output "##########################################"
+                    $scan | ForEach-Object {
+                        $macid = ((arp -a $_.ComputerName | Select-String '([0-9a-f]{2}-){5}[0-9a-f]{2}').Matches.Value).Replace("-", ":")
+                        $macpop = $macid.replace(":", "")
+                        $macsubstr = $macpop.Substring(0, 6)
+                        $org = ($ouiobject | Where-Object { $_.assignment -eq $macsubstr })."Organization Name"
+                        Add-Member -InputObject $_ -MemberType NoteProperty -Name MacID -Value $macid
+                        Add-Member -InputObject $_ -MemberType NoteProperty -Name ManufacturerName -Value $org
+                    }
                     # Normalize Subnet text for filename.
                     $subnetText = $(($subnet.Replace("/", ".CIDR.")))
                     # If report switch is true.
@@ -103,18 +111,13 @@ function Get-NetworkScan {
     }# End Close
 }
 
-$testscan = Invoke-PSnmap -ComputerName "10.11.10.0/24" -Port $ports -Dns -NoSummary -AddService | Where-Object { $_.Ping -eq $true }
-$testscan | ForEach-Object {
-    $macid = ((arp -a $_.ComputerName | Select-String '([0-9a-f]{2}-){5}[0-9a-f]{2}').Matches.Value).Replace("-",":")
-    $macpop = $macid.replace(":","")
-    $macsubstr = $macpop.Substring(0,6)
-    $org = ($ouiobject | Where-Object {$_.assignment -eq $macsubstr })."Organization Name"
-    Add-Member -InputObject $_ -MemberType NoteProperty -Name MacID -Value $macid
-    Add-Member -InputObject $_ -MemberType NoteProperty -Name ManufacturerName -Value $org
-    Start-Sleep -Seconds 1
-}
-
 <#
+
+[int[]]$ports = "21", "22", "23", "25", "53", "67", "68", "80", "443", `
+    "88", "464", "123", "135", "137", "138", "139", `
+    "445", "389", "636", "514", "587", "1701", `
+    "3268", "3269", "3389", "5985", "5986"
+$testscan = Invoke-PSnmap -ComputerName "10.11.10.0/24" -Port $ports -Dns -NoSummary -AddService | Where-Object { $_.Ping -eq $true }
 
 $A = Get-ChildItem C:\Temp\test.txt
 $S = {[math]::Round(($this.Length / 1MB), 2)}
