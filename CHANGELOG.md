@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added telnet to default ports to scan.
+- Added OUI lookup.
+- Added MACID lookup
+
 ## [1.9.4] - 2022-11-17
 
 ### Fixed

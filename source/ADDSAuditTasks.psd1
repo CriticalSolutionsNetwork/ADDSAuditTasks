@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.9.2'
+    ModuleVersion     = '1.9.4'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Get-ADDSActiveAccountAudit','Get-ADDSDepartedUsersAccountAudit','Get-ADDSPrivilegedAccountAudit','Get-ADUsersLastLogon','Get-NetworkScan','Switch-SurnameWithGivenName')
+    FunctionsToExport = @('Get-ADDSActiveAccountAudit', 'Get-ADDSDepartedUsersAccountAudit', 'Get-ADDSPrivilegedAccountAudit', 'Get-ADUsersLastLogon', 'Get-NetworkScan', 'Switch-SurnameWithGivenName')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport   = @()
@@ -96,7 +96,7 @@
 
             Prerelease   = ''
             # Tags applied to this module. These help with module discovery in online galleries.
-            # Tags = @()
+            Tags = @('ActiveDirectory','Audit','Security')
 
             # A URL to the license for this module.
             # LicenseUri = ''
@@ -108,12 +108,15 @@
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.9.2] - 2022-11-08
+            ReleaseNotes = '## [1.9.4] - 2022-11-17
 
 ### Fixed
 
-- Fixed ordered hashtable in departed users audit.
-- Fixed service principal name output.
+- Formatting in various modules. No function changes.
+
+### Added
+
+- Added options to scan specific hosts, subnets, IPs or FQDNs.
 
 '
 
