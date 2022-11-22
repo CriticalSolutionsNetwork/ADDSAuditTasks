@@ -321,7 +321,7 @@ function Get-ADDSPrivilegedAccountAudit {
             Export-AuditCSVtoZip -Exported $Export2 -CSVName $csv2 -ZipName $zip2 -ErrorVariable ExportAuditCSVZipErr2
             # try third export
             Export-AuditCSVtoZip -Exported $Export3 -CSVName $csv3 -ZipName $zip3 -ErrorVariable ExportAuditCSVZipErr3
-        } # End If
+        } # End If Not Clean
     } # End process
     End {
         try {

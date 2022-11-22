@@ -233,3 +233,20 @@ $testoutput
 $testmacid
 
 #>
+
+
+##### Testing
+
+# Create a PSCustomObject (ironically using a hashtable)
+$ht1 = @{ A = 'a'; B = 'b'; DateTime = Get-Date }
+$theObject = new-object psobject -Property $ht1
+
+# Convert the PSCustomObject back to a hashtable
+$ht2 = @{}
+$theObject.psobject.properties | ForEach-Object { $ht2[$_.Name] = $_.Value }
+
+$ht3 = [ordered]@{ Prop1 = 'a'; Prop2 = 'b'; DateTime1 = Get-Date }
+$theObject.psobject.properties | ForEach-Object { $ht3[$_.Name] = $_.Value }
+
+$theObject1 = new-object psobject -Property $ht3
+$theObject1 | ft -AutoSize

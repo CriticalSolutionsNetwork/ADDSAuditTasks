@@ -80,7 +80,8 @@ function Get-NetworkScan {
                     Write-Output "Gateway: $($network.IPv4DefaultGateway.nexthop)"
                     Write-Output "##########################################"
                     $scan | ForEach-Object {
-                        $macid = ((arp -a $_.ComputerName | Select-String '([0-9a-f]{2}-){5}[0-9a-f]{2}').Matches.Value).Replace("-", ":") | Out-Null
+                        $org = ""
+                        $macid = ((arp -a $_.ComputerName | Select-String '([0-9a-f]{2}-){5}[0-9a-f]{2}').Matches.Value).Replace("-", ":")
                         $macpop = $macid.replace(":", "")
                         $macsubstr = $macpop.Substring(0, 6)
                         $org = ($ouiobject | Where-Object { $_.assignment -eq $macsubstr })."Organization Name"
@@ -92,6 +93,7 @@ function Get-NetworkScan {
                             Add-Member -InputObject $_ -MemberType NoteProperty -Name ManufacturerName -Value "Not Found"
                         }
                     }
+
                     # Normalize Subnet text for filename.
                     $subnetText = $(($subnet.Replace("/", ".CIDR.")))
                     # If report switch is true.
