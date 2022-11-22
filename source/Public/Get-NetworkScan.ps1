@@ -80,7 +80,7 @@ function Get-NetworkScan {
                     Write-Output "Gateway: $($network.IPv4DefaultGateway.nexthop)"
                     Write-Output "##########################################"
                     $scan | ForEach-Object {
-                        $macid = ((arp -a $_.ComputerName | Select-String '([0-9a-f]{2}-){5}[0-9a-f]{2}').Matches.Value).Replace("-", ":")
+                        $macid = ((arp -a $_.ComputerName | Select-String '([0-9a-f]{2}-){5}[0-9a-f]{2}').Matches.Value).Replace("-", ":") | Out-Null
                         $macpop = $macid.replace(":", "")
                         $macsubstr = $macpop.Substring(0, 6)
                         $org = ($ouiobject | Where-Object { $_.assignment -eq $macsubstr })."Organization Name"
