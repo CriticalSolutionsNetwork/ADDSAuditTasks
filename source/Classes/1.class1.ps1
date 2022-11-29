@@ -65,5 +65,6 @@ class ADAuditAccount {
         ) # End Manager
         $this.AccessRequired = $AccessRequired
         $this.NeedMailbox = $NeedMailbox
+        $this.Department = $Department
     }
 }

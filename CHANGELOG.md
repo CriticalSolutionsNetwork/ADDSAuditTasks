@@ -5,6 +5,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.5] - 2022-11-29
+
+### Added
+
+- Added telnet to default ports to scan.
+- Added OUI lookup.
+- Added MACID lookup
+
+### Fixed
+
+- Fixed `[ADAuditUser]` Class Department property.
+
 ## [1.9.4] - 2022-11-17
 
 ### Fixed

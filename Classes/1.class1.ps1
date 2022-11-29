@@ -171,7 +171,7 @@ $ADDSAuditAccount
 Write-Output $ADDSExport
 #>
 
-            <#
+<#
             | Select-Object `
             @{N = 'UserName'; E = { $_.samaccountname } }, `
             @{N = 'FirstName'; E = { $_.GivenName } }, `
@@ -197,3 +197,56 @@ Write-Output $ADDSExport
                 @{N = 'Manager'; E = { (Get-ADUser -Identity $_.manager).Name } }, `
                 Department, "Access Required?", "Need Mailbox?" -OutVariable Export -ErrorVariable ExportErr | Out-Null
                 #>
+
+
+
+<#
+
+[int[]]$ports = "21", "22", "23", "25", "53", "67", "68", "80", "443", `
+    "88", "464", "123", "135", "137", "138", "139", `
+    "445", "389", "636", "514", "587", "1701", `
+    "3268", "3269", "3389", "5985", "5986"
+$testscan = Invoke-PSnmap -ComputerName "10.11.10.0/24" -Port $ports -Dns -NoSummary -AddService | Where-Object { $_.Ping -eq $true }
+
+$A = Get-ChildItem C:\Temp\test.txt
+$S = {[math]::Round(($this.Length / 1MB), 2)}
+$A | Add-Member -MemberType ScriptMethod -Name "SizeInMB" -Value $S
+$A.SizeInMB()
+
+0.43
+# Test retrieval using arp
+$macid = ((arp -a $_.ComputerName | Select-String '([0-9a-f]{2}-){5}[0-9a-f]{2}').Matches.Value).Replace("-",":")
+$ouifile = invoke-restmethod https://standards-oui.ieee.org/oui/oui.csv
+# TestMAC id formatted the same as previous output for $macid. Replace with $testmacid with $macid in prod.
+$testmacid = "00:15:5D:00:00:00"
+# Format mac for search
+$macpop = $testmacid.replace(":","")
+# Convert CSV to Object
+$ouiobject = $ouifile | ConvertFrom-Csv
+# Select first 6 digits
+$macsubstr = $macpop.Substring(0,6)
+# search ieee oui doc for Organization
+($ouiobject | Where-Object {$_.assignment -eq $macsubstr })."Organization Name"
+
+$testoutput
+
+$testmacid
+
+#>
+
+
+##### Testing
+
+# Create a PSCustomObject (ironically using a hashtable)
+$ht1 = @{ A = 'a'; B = 'b'; DateTime = Get-Date }
+$theObject = new-object psobject -Property $ht1
+
+# Convert the PSCustomObject back to a hashtable
+$ht2 = @{}
+$theObject.psobject.properties | ForEach-Object { $ht2[$_.Name] = $_.Value }
+
+$ht3 = [ordered]@{ Prop1 = 'a'; Prop2 = 'b'; DateTime1 = Get-Date }
+$theObject.psobject.properties | ForEach-Object { $ht3[$_.Name] = $_.Value }
+
+$theObject1 = new-object psobject -Property $ht3
+$theObject1 | ft -AutoSize
