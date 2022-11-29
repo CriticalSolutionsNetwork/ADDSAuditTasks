@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.5] - 2022-11-29
+
 ### Added
 
 - Added telnet to default ports to scan.
