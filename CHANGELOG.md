@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added OUI lookup.
 - Added MACID lookup
 
+### Fixed
+
+- Fixed `[ADAuditUser]` Class Department property.
+
 ## [1.9.4] - 2022-11-17
 
 ### Fixed

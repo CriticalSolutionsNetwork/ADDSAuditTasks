@@ -74,11 +74,11 @@ function Get-NetworkScan {
                     $NetWorkScan = Invoke-PSnmap -ComputerName $subnet -Port $ports -Dns -NoSummary -AddService
                     # Filter devices that don't ping as no results will be found.
                     $scan = $NetworkScan | Where-Object { $_.Ping -eq $true }
-                    Write-Output "##########################################"
-                    Write-Output "Network scan for Subnet $Subnet completed."
-                    Write-Output "DHCP Server: $($DHCPServer)"
-                    Write-Output "Gateway: $($network.IPv4DefaultGateway.nexthop)"
-                    Write-Output "##########################################"
+                    Write-Verbose "##########################################"
+                    Write-Verbose "Network scan for Subnet $Subnet completed."
+                    Write-Verbose "DHCP Server: $($DHCPServer)"
+                    Write-Verbose "Gateway: $($network.IPv4DefaultGateway.nexthop)"
+                    Write-Verbose "##########################################"
                     $scan | ForEach-Object {
                         $org = ""
                         $macid = ((arp -a $_.ComputerName | Select-String '([0-9a-f]{2}-){5}[0-9a-f]{2}').Matches.Value).Replace("-", ":")
@@ -93,7 +93,6 @@ function Get-NetworkScan {
                             Add-Member -InputObject $_ -MemberType NoteProperty -Name ManufacturerName -Value "Not Found"
                         }
                     }
-
                     # Normalize Subnet text for filename.
                     $subnetText = $(($subnet.Replace("/", ".CIDR.")))
                     # If report switch is true.
