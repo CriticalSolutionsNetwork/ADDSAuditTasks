@@ -23,7 +23,7 @@ function Get-NetworkScan {
     .PARAMETER Report
         Specify this switch if you would like a report generated in C:\temp.
     #>
-    [CmdletBinding(DefaultParameterSetName = 'Default')]
+    [CmdletBinding(DefaultParameterSetName = 'Default' , HelpURI = "https://criticalsolutionsnetwork.github.io/ADDSAuditTasks/#Get-NetworkScan")]
     param (
         [Parameter(
             ValueFromPipelineByPropertyName = $true,
