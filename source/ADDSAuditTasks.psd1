@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.9.5'
+    ModuleVersion     = '1.9.6'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Get-ADDSActiveAccountAudit','Get-ADDSDepartedUsersAccountAudit','Get-ADDSPrivilegedAccountAudit','Get-ADUsersLastLogon','Get-NetworkScan','Switch-SurnameWithGivenName')
+    FunctionsToExport = @('Get-ADDSActiveAccountAudit','Get-ADDSAssetInventoryAudit','Get-ADDSDepartedUsersAccountAudit','Get-ADDSPrivilegedAccountAudit','Get-ADUsersLastLogon','Get-NetworkScan','Switch-SurnameWithGivenName')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport   = @()
@@ -108,17 +108,11 @@
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.9.5] - 2022-11-29
+            ReleaseNotes = '## [1.9.6] - 2022-12-08
 
 ### Added
 
-- Added telnet to default ports to scan.
-- Added OUI lookup.
-- Added MACID lookup
-
-### Fixed
-
-- Fixed `[ADAuditUser]` Class Department property.
+- Feature Added: Function `ADDSAssetInventoryAudit` with reporting.
 
 '
 

@@ -39,7 +39,7 @@ Get-ADDSActiveAccountAudit [-Clean] [<CommonParameters>]
 | <nobr>ApiToken</nobr> |  | Private Function Key. | true | true \\(ByPropertyName\\) |  |
 | <nobr>FTPHost</nobr> |  | SFTP Hostname. | true | true \\(ByPropertyName\\) |  |
 | <nobr>SshHostKeyFingerprint</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \\(ByPropertyName\\) |  |
-| <nobr>RemotePath</nobr> |  | Remove FTP path. Will be created in the user path under functionname folder if not specified. | false | true \\(ByPropertyName\\) | \\("./" \\+ $\\($MyInvocation.MyCommand.Name -replace '\\..\\*'\\)\\) |
+| <nobr>RemotePath</nobr> |  | Remove FTP path. Will be created in the user path under functionname folder if not specified. | false | true \\(ByPropertyName\\) | \\("./" \+ $\\($MyInvocation.MyCommand.Name -replace '\\..\\*'\\)\\) |
 | <nobr>Clean</nobr> |  | Remove installed modules during run. Remove local files if not a LocalDisk run. | true | false | False |
 ### Note
 Can take password as input into secure string using \\(Read-Host -AsSecureString\\).
@@ -163,7 +163,7 @@ Get-ADDSDepartedUsersAccountAudit [-Clean] [<CommonParameters>]
 | <nobr>ApiToken</nobr> |  | Private Function Key. | true | true \\(ByPropertyName\\) |  |
 | <nobr>FTPHost</nobr> |  |  | true | true \\(ByPropertyName\\) |  |
 | <nobr>SshHostKeyFingerprint</nobr> |  |  | true | true \\(ByPropertyName\\) |  |
-| <nobr>RemotePath</nobr> |  |  | false | true \\(ByPropertyName\\) | \\("./" \\+ $\\($MyInvocation.MyCommand.Name -replace '\\..\\*'\\)\\) |
+| <nobr>RemotePath</nobr> |  |  | false | true \\(ByPropertyName\\) | \\("./" \+ $\\($MyInvocation.MyCommand.Name -replace '\\..\\*'\\)\\) |
 | <nobr>Clean</nobr> |  | Remove installed modules during run. Remove local files if not a LocalDisk run. | true | false | False |
 | <nobr>WildCardIdentifier</nobr> |  | Name wildcard appended to user account. | true | true \\(ByPropertyName\\) |  |
 ### Note
@@ -238,7 +238,7 @@ Get-ADDSPrivilegedAccountAudit [-Clean] [<CommonParameters>]
 | <nobr>ApiToken</nobr> |  | Private Function Key. | true | true \\(ByPropertyName\\) |  |
 | <nobr>FTPHost</nobr> |  | SFTP Hostname. | true | true \\(ByPropertyName\\) |  |
 | <nobr>SshHostKeyFingerprint</nobr> |  | Adds parameters for sending Audit Report via SFTP. | true | true \\(ByPropertyName\\) |  |
-| <nobr>RemotePath</nobr> |  | Remove FTP path. Will be created in the user path under functionname folder if not specified. | false | true \\(ByPropertyName\\) | \\("./" \\+ $\\($MyInvocation.MyCommand.Name -replace '\\..\\*'\\)\\) |
+| <nobr>RemotePath</nobr> |  | Remove FTP path. Will be created in the user path under functionname folder if not specified. | false | true \\(ByPropertyName\\) | \\("./" \+ $\\($MyInvocation.MyCommand.Name -replace '\\..\\*'\\)\\) |
 | <nobr>Clean</nobr> |  | Remove installed modules during run. Remove local files if not a LocalDisk run. | true | false | False |
 ### Note
 Can take password as input into secure string using \\(Read-Host -AsSecureString\\).
@@ -317,7 +317,7 @@ Get-NetworkScan [[-Ports] <Int32[]>] [-Computers] <String[]> [-Report] [<CommonP
 ### Parameters
 | Name  | Alias  | Description | Required? | Pipeline Input | Default Value |
 | - | - | - | - | - | - |
-| <nobr>Ports</nobr> |  | Default ports are: "21", "22", "23", "25", "53", "67", "68", "80", "443", \` "88", "464", "123", "135", "137", "138", "139", \` "445", "389", "636", "514", "587", "1701", \` "3268", "3269", "3389", "5985", "5986"  If you want to supply a port, do so as an integer or an array of integers. "22","80","443", etc. | false | true \\(ByPropertyName\\) |  |
+| <nobr>Ports</nobr> |  | Default ports are: "21", "22", "23", "25", "53", "67", "68", "80", "443", \\` "88", "464", "123", "135", "137", "138", "139", \\` "445", "389", "636", "514", "587", "1701", \\` "3268", "3269", "3389", "5985", "5986"  If you want to supply a port, do so as an integer or an array of integers. "22","80","443", etc. | false | true \\(ByPropertyName\\) |  |
 | <nobr>LocalSubnets</nobr> |  |  | true | true \\(ByPropertyName\\) | False |
 | <nobr>Computers</nobr> |  |  | true | true \\(ByPropertyName\\) |  |
 | <nobr>Report</nobr> |  | Specify this switch if you would like a report generated in C:\\temp. | false | false | False |

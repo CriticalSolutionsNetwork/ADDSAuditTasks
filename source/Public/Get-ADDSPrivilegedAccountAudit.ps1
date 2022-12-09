@@ -59,7 +59,7 @@ function Get-ADDSPrivilegedAccountAudit {
         Remove installed modules during run. Remove local files if not a LocalDisk run.
     .NOTES
         Can take password as input into secure string using (Read-Host -AsSecureString).
-        #>
+    #>
     [CmdletBinding(DefaultParameterSetName = 'LocalDisk' , HelpURI = "https://criticalsolutionsnetwork.github.io/ADDSAuditTasks/#Get-ADDSPrivilegedAccountAudit")]
     param (
         [Parameter(

@@ -66,7 +66,7 @@ function Get-ADDSActiveAccountAudit {
         Remove installed modules during run. Remove local files if not a LocalDisk run.
     .NOTES
         Can take password as input into secure string using (Read-Host -AsSecureString).
-        #>
+    #>
     [CmdletBinding(DefaultParameterSetName = 'LocalDisk', HelpURI = "https://criticalsolutionsnetwork.github.io/ADDSAuditTasks/#Get-ADDSActiveAccountAudit")]
     param (
         [Parameter(
@@ -245,7 +245,7 @@ function Get-ADDSActiveAccountAudit {
             Write-TSLog "Searching for users who have not signed in within the last $DaysInactive days, where parameter Enabled = $Enabled"
             # Audit Script with export to csv and zip. Paramters for Manager, lastLogonTimestamp and DistinguishedName normalized.
             # GetActiveUsers
-            Get-aduser -Filter { LastLogonTimeStamp -lt $time -and Enabled -eq $Enabled } -Properties `
+            Get-ADUser -Filter { LastLogonTimeStamp -lt $time -and Enabled -eq $Enabled } -Properties `
                 samaccountname, GivenName, Surname, Name, UserPrincipalName, lastlogontimestamp, DistinguishedName, `
                 Title, Enabled, Description, Manager, Department -OutVariable ADExport
             $Export = @()
