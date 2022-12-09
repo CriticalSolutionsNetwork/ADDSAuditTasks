@@ -29,7 +29,7 @@ function Get-ADDSAssetInventoryAudit {
         This is the folder where attachments are going to be saved.
     .NOTES
         Outputs to C:\temp by default. For help type: help Get-ADDSAssetInventoryAudit -ShowWindow
-        #>
+    #>
     [CmdletBinding(DefaultParameterSetName = 'HostType' , HelpURI = "https://criticalsolutionsnetwork.github.io/ADDSAuditTasks/#Get-ADDSInventoryAudit")]
     param (
         [ValidateSet("Windows10orUp", "WindowsServer")]
