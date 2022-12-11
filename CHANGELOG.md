@@ -5,6 +5,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Reporting QoL improvements to Asset inventory
+- Added zip and directory to Report Output
+- Option to only provide output to console.
+- Check for Active Directory Module
+- Option to search enabled or disabled hosts in `Get-ADDSAssetInventoryAudit`
+- Verbose Output to assist with identifying output location.
+
+### Fixed
+
+- Fixed `Get-ADDSActiveAccountAudit` so that output is piped to `$null`
+
+## [1.9.7] - 2022-12-09
+
 ### Fixed
 
 - Comment-Based help

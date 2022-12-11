@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.9.6'
+    ModuleVersion     = '1.9.7'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -108,11 +108,11 @@
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.9.6] - 2022-12-08
+            ReleaseNotes = '## [1.9.7] - 2022-12-09
 
-### Added
+### Fixed
 
-- Feature Added: Function `ADDSAssetInventoryAudit` with reporting.
+- Comment-Based help
 
 '
 

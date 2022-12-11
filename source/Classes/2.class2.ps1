@@ -1,6 +1,7 @@
 class ADComputerAccount {
     [string]$ComputerName
     [string]$DNSHostName
+    [bool]$Enabled
     [string]$IPv4Address
     [string]$IPv6Address
     [string]$OperatingSystem
@@ -17,6 +18,7 @@ class ADComputerAccount {
     ADComputerAccount(
         [string]$ComputerName,
         [string]$DNSHostName,
+        [bool]$Enabled,
         [string]$IPv4Address,
         [string]$IPv6Address,
         [string]$OperatingSystem,
@@ -33,6 +35,7 @@ class ADComputerAccount {
         #Begin Contructor 1
         $this.ComputerName = $ComputerName
         $this.DNSHostName = $DNSHostName
+        $this.Enabled   = $Enabled
         $this.IPv4Address = $IPv4Address
         $this.IPv6Address = $IPv6Address
         $this.OperatingSystem = $OperatingSystem
