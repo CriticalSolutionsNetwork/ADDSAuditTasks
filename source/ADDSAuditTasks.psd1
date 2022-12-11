@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.9.7'
+    ModuleVersion     = '1.9.8'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -108,11 +108,20 @@
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.9.7] - 2022-12-09
+            ReleaseNotes = '## [1.9.8] - 2022-12-11
+
+### Added
+
+- Reporting QoL improvements to Asset inventory
+- Added zip and directory to Report Output
+- Option to only provide output to console.
+- Check for Active Directory Module
+- Option to search enabled or disabled hosts in `Get-ADDSAssetInventoryAudit`
+- Verbose Output to assist with identifying output location.
 
 ### Fixed
 
-- Comment-Based help
+- Fixed `Get-ADDSActiveAccountAudit` so that output is piped to `$null`
 
 '
 

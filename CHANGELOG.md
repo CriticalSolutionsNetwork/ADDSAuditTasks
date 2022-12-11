@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.8] - 2022-12-11
+
 ### Added
 
 - Reporting QoL improvements to Asset inventory
