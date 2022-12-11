@@ -247,7 +247,7 @@ function Get-ADDSActiveAccountAudit {
             # GetActiveUsers
             Get-ADUser -Filter { LastLogonTimeStamp -lt $time -and Enabled -eq $Enabled } -Properties `
                 samaccountname, GivenName, Surname, Name, UserPrincipalName, lastlogontimestamp, DistinguishedName, `
-                Title, Enabled, Description, Manager, Department -OutVariable ADExport
+                Title, Enabled, Description, Manager, Department -OutVariable ADExport | Out-Null
             $Export = @()
             foreach ($item in $ADExport) {
                 $Export += [ADAuditAccount]::new(

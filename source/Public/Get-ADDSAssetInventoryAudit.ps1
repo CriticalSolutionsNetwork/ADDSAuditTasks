@@ -1,7 +1,7 @@
 function Get-ADDSAssetInventoryAudit {
     <#
     .SYNOPSIS
-        Active Directory Server and Workstation Audit with Report export option (Can also be piped to CSV if Report isn't specified.
+        Active Directory Server and Workstation Audit with Report export option (Can also be piped to CSV if Report isn't specified).
     .DESCRIPTION
         Audit's Active Directory taking "days" as the input for how far back to check for a device's last sign in.
         Output can be piped to a csv manually, or automatically to C:\temp or a specified path in "DirPath" using
@@ -65,16 +65,39 @@ function Get-ADDSAssetInventoryAudit {
             Position = 3,
             HelpMessage = 'Enter the working directory you wish the report to save to. Default creates C:\temp'
         )]
-        [string]$DirPath = 'C:\Temp\'
+        [string]$DirPath = 'C:\temp\ADDSAssetInventoryAudit',
+        [Parameter(
+            HelpMessage = 'Search for Enabled or Disabled hosts',
+            ValueFromPipelineByPropertyName = $true
+        )]
+        [bool]$Enabled = $true
     )
     begin {
         $ScriptFunctionName = $MyInvocation.MyCommand.Name -replace '\..*'
         $time = (Get-Date).Adddays( - ($DaystoConsiderAHostInactive))
+        $module = Get-Module -Name ActiveDirectory -ListAvailable
+        if (-not $module) {
+            [ValidateSet("Y", "N")]$choice = Read-Host "Install Active Directory Module? Y or N ?"
+            if (($Choice -eq "Y")) {
+                Add-WindowsFeature RSAT-AD-PowerShell -IncludeAllSubFeature -Verbose -ErrorAction Stop
+            }
+            else {
+                throw "You must install the Active Directory module to continue"
+            }
+
+        }
+        try {
+            Import-Module "activedirectory" -Global -ErrorAction Stop | Out-Null
+        }
+        catch {
+            throw $Error[0].Error.Exception
+        }
         $AttachmentFolderPathCheck = Test-Path -Path $DirPath
         If (!($AttachmentFolderPathCheck)) {
             Try {
+
                 # If not present then create the dir
-                New-Item -ItemType Directory $DirPath -Force -ErrorAction Stop
+                New-Item -ItemType Directory $DirPath -Force -ErrorAction Stop | Out-Null
             }
             Catch {
                 throw "Unable to create output directory $($DirPath)"
@@ -84,17 +107,32 @@ function Get-ADDSAssetInventoryAudit {
             'HostType' {
                 if ($HostType -eq "Windows10orUp") {
                     $OSPicked = "*Windows 1*"
+                    $FileSuffix = "Workstations"
+                    Write-Verbose "###############################################"
+                    Write-Verbose "Searching Windows Workstations......"
+                    Start-Sleep 2
                 }
                 elseif ($HostType -eq "WindowsServer") {
                     $OSPicked = "*Server*"
+                    $FileSuffix = "Servers"
+                    Write-Verbose "###############################################"
+                    Write-Verbose "Searching Windows Servers......"
+                    Start-Sleep 2
                 }
             }
-            'OSType' { $OSPicked = '*' + $OSType + '*' }
+            'OSType' {
+                $OSPicked = '*' + $OSType + '*'
+                $FileSuffix = $OSType
+                Write-Verbose "###############################################"
+                Write-Verbose "Searching OSType $OsType......"
+                Start-Sleep 2
+            }
         }
         $propsArray = `
             "Created", `
             "Description", `
             "DNSHostName", `
+            "Enabled", `
             "IPv4Address", `
             "IPv6Address", `
             "KerberosEncryptionType", `
@@ -106,7 +144,11 @@ function Get-ADDSAssetInventoryAudit {
             "whenChanged"
     } # End Begin
     process {
-        $ActiveComputers = (Get-ADComputer -Filter { (LastLogonTimeStamp -gt $time) -and (Enabled -eq $true) -and (OperatingSystem -like $OSPicked) }).Name
+        Write-Verbose "Searching computers that have logged in within the last $DaystoConsiderAHostInactive days."
+        Write-Verbose "Where property Enabled = $Enabled"
+        Write-Verbose "And Operating System is like: $OSPicked."
+        Start-Sleep 2
+        $ActiveComputers = (Get-ADComputer -Filter { (LastLogonTimeStamp -gt $time) -and (Enabled -eq $Enabled) -and (OperatingSystem -like $OSPicked) }).Name
         $ADComps = @()
         foreach ($comp in $ActiveComputers) {
             Get-ADComputer -Identity $comp -Properties $propsArray | Select-Object $propsArray -OutVariable ADComp | Out-Null
@@ -117,6 +159,7 @@ function Get-ADDSAssetInventoryAudit {
             $ADCompExport += [ADComputerAccount]::new(
                 $item.Name,
                 $item.DNSHostName,
+                $item.Enabled,
                 $item.IPv4Address,
                 $item.IPv6Address,
                 $item.OperatingSystem,
@@ -136,6 +179,7 @@ function Get-ADDSAssetInventoryAudit {
             $hash = [ordered]@{
                 DNSHostName            = $Comp.DNSHostName
                 ComputerName           = $Comp.ComputerName
+                Enabled                = $Comp.Enabled
                 IPv4Address            = $Comp.IPv4Address
                 IPv6Address            = $Comp.IPv6Address
                 OperatingSystem        = $Comp.OperatingSystem
@@ -156,11 +200,22 @@ function Get-ADDSAssetInventoryAudit {
     end {
         if ($Report) {
             # Add Datetime to filename
-            $csvFileName = "$DirPath\$((Get-Date).ToString('yyyy-MM-dd_hh.mm.ss'))_$($ScriptFunctionName)_$($env:USERDNSDOMAIN)"
+            $csvFileName = "$DirPath\$((Get-Date).ToString('yyyy-MM-dd_hh.mm.ss'))_$($env:USERDNSDOMAIN)_$($ScriptFunctionName)_$($FileSuffix)"
             # Create FileNames
             $csv = "$csvFileName.csv"
+            $zip = "$csvFileName.zip"
             $Export | Export-Csv $csv -NoTypeInformation
+            Compress-Archive -Path $csv -DestinationPath $zip
+            Remove-Item $csv -Force
+            Write-Verbose "Archive saved to: "
+            Write-Verbose "Directory: $DirPath"
+            Write-Verbose "FilePath: $zip"
         }
-        return $Export
+        else {
+            Write-Verbose "Returning output object."
+            Start-Sleep 2
+            return $Export
+        }
+
     } # End End
 }
