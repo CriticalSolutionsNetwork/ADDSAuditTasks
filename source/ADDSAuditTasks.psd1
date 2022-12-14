@@ -107,6 +107,9 @@
             # A URL to an icon representing this module.
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
+            # External dependent modules of this module
+            ExternalModuleDependencies = @('ActiveDirectory')
+
             # ReleaseNotes of this module
             ReleaseNotes = '## [1.9.9] - 2022-12-13
 
