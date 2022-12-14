@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.9.8'
+    ModuleVersion     = '1.9.9'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -51,7 +51,7 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    # RequiredModules = @()
+    # RequiredModules = @("ActiveDirectory")
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -108,20 +108,12 @@
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.9.8] - 2022-12-11
+            ReleaseNotes = '## [1.9.9] - 2022-12-13
 
 ### Added
 
-- Reporting QoL improvements to Asset inventory
-- Added zip and directory to Report Output
-- Option to only provide output to console.
-- Check for Active Directory Module
-- Option to search enabled or disabled hosts in `Get-ADDSAssetInventoryAudit`
-- Verbose Output to assist with identifying output location.
-
-### Fixed
-
-- Fixed `Get-ADDSActiveAccountAudit` so that output is piped to `$null`
+- More generic call for workstations in asset inventory.
+- Additional call for Non-Windows Machines using POSIX.
 
 '
 
