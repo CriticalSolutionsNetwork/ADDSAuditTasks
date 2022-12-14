@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Active Directory Module dependancy
+
 ## [1.9.9] - 2022-12-13
 
 ### Added
