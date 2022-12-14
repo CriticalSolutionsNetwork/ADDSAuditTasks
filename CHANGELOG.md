@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- More generic call for workstations in asset inventory.
+- Additional call for Non-Windows Machines using POSIX.
+
 ## [1.9.8] - 2022-12-11
 
 ### Added
