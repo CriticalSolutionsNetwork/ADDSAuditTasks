@@ -104,19 +104,19 @@ Outputs to C:\\temp by default. For help type: help Get-ADDSAssetInventoryAudit 
 ### Examples
 **EXAMPLE 1**
 ```powershell
-Get-ADDSInventoryAudit -HostType WindowsServer
+Get-ADDSInventoryAudit -HostType WindowsServers
 ```
 
 
 **EXAMPLE 2**
 ```powershell
-Get-ADDSInventoryAudit -HostType Windows10orUp -DirPath "C:\Temp\" -Report
+Get-ADDSInventoryAudit -HostType WindowsWorkstations -DirPath "C:\Temp\" -Report
 ```
 
 
 **EXAMPLE 3**
 ```powershell
-Get-ADDSInventoryAudit -HostType WindowsServer -DirPath "C:\Temp\" -Report
+Get-ADDSInventoryAudit -HostType WindowsServers -DirPath "C:\Temp\" -Report
 ```
 
 
@@ -318,7 +318,7 @@ Get-NetworkScan [[-Ports] <Int32[]>] [-Computers] <String[]> [-Report] [<CommonP
 ### Parameters
 | Name  | Alias  | Description | Required? | Pipeline Input | Default Value |
 | - | - | - | - | - | - |
-| <nobr>Ports</nobr> |  | Default ports are: "21", "22", "23", "25", "53", "67", "68", "80", "443", \` "88", "464", "123", "135", "137", "138", "139", \` "445", "389", "636", "514", "587", "1701", \` "3268", "3269", "3389", "5985", "5986"  If you want to supply a port, do so as an integer or an array of integers. "22","80","443", etc. | false | true \(ByPropertyName\\) |  |
+| <nobr>Ports</nobr> |  | Default ports are: "21", "22", "23", "25", "53", "67", "68", "80", "443", \\` "88", "464", "123", "135", "137", "138", "139", \\` "445", "389", "636", "514", "587", "1701", \\` "3268", "3269", "3389", "5985", "5986"  If you want to supply a port, do so as an integer or an array of integers. "22","80","443", etc. | false | true \(ByPropertyName\\) |  |
 | <nobr>LocalSubnets</nobr> |  |  | true | true \(ByPropertyName\\) | False |
 | <nobr>Computers</nobr> |  |  | true | true \(ByPropertyName\\) |  |
 | <nobr>Report</nobr> |  | Specify this switch if you would like a report generated in C:\\temp. | false | false | False |
