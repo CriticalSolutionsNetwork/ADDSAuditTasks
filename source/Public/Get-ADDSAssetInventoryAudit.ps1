@@ -8,11 +8,11 @@ function Get-ADDSAssetInventoryAudit {
         the -Report Switch.
         Use the Tab key for the -HostType Parameter.
     .EXAMPLE
-        PS C:\> Get-ADDSInventoryAudit -HostType WindowsServer
+        PS C:\> Get-ADDSInventoryAudit -HostType WindowsServers
     .EXAMPLE
-        PS C:\> Get-ADDSInventoryAudit -HostType Windows10orUp -DirPath "C:\Temp\" -Report
+        PS C:\> Get-ADDSInventoryAudit -HostType WindowsWorkstations -DirPath "C:\Temp\" -Report
     .EXAMPLE
-        PS C:\> Get-ADDSInventoryAudit -HostType WindowsServer -DirPath "C:\Temp\" -Report
+        PS C:\> Get-ADDSInventoryAudit -HostType WindowsServers -DirPath "C:\Temp\" -Report
     .EXAMPLE
         PS C:\> Get-ADDSInventoryAudit -OSType "2008" -DirPath "C:\Temp\" -Report
     .PARAMETER HostType
@@ -32,7 +32,7 @@ function Get-ADDSAssetInventoryAudit {
     #>
     [CmdletBinding(DefaultParameterSetName = 'HostType' , HelpURI = "https://criticalsolutionsnetwork.github.io/ADDSAuditTasks/#Get-ADDSInventoryAudit")]
     param (
-        [ValidateSet("Windows10orUp", "WindowsServer")]
+        [ValidateSet("WindowsServers","WindowsWorkstations","Non-Windows")]
         [Parameter(
             ParameterSetName = 'HostType',
             Mandatory = $true,
@@ -84,7 +84,6 @@ function Get-ADDSAssetInventoryAudit {
             else {
                 throw "You must install the Active Directory module to continue"
             }
-
         }
         try {
             Import-Module "activedirectory" -Global -ErrorAction Stop | Out-Null
@@ -95,7 +94,6 @@ function Get-ADDSAssetInventoryAudit {
         $AttachmentFolderPathCheck = Test-Path -Path $DirPath
         If (!($AttachmentFolderPathCheck)) {
             Try {
-
                 # If not present then create the dir
                 New-Item -ItemType Directory $DirPath -Force -ErrorAction Stop | Out-Null
             }
@@ -105,14 +103,20 @@ function Get-ADDSAssetInventoryAudit {
         }
         switch ($PsCmdlet.ParameterSetName) {
             'HostType' {
-                if ($HostType -eq "Windows10orUp") {
-                    $OSPicked = "*Windows 1*"
+                if ($HostType -eq "WindowsWorkstations") {
                     $FileSuffix = "Workstations"
                     Write-Verbose "###############################################"
                     Write-Verbose "Searching Windows Workstations......"
                     Start-Sleep 2
                 }
-                elseif ($HostType -eq "WindowsServer") {
+                elseif ($HostType -eq "Non-Windows") {
+                    $POSIX = $true
+                    $FileSuffix = "Non-Windows"
+                    Write-Verbose "###############################################"
+                    Write-Verbose "Searching Non-Windows Computer Objects......"
+                    Start-Sleep 2
+                }
+                elseif ($HostType -eq "WindowsServers") {
                     $OSPicked = "*Server*"
                     $FileSuffix = "Servers"
                     Write-Verbose "###############################################"
@@ -146,9 +150,21 @@ function Get-ADDSAssetInventoryAudit {
     process {
         Write-Verbose "Searching computers that have logged in within the last $DaystoConsiderAHostInactive days."
         Write-Verbose "Where property Enabled = $Enabled"
-        Write-Verbose "And Operating System is like: $OSPicked."
+
         Start-Sleep 2
-        $ActiveComputers = (Get-ADComputer -Filter { (LastLogonTimeStamp -gt $time) -and (Enabled -eq $Enabled) -and (OperatingSystem -like $OSPicked) }).Name
+        if ($OSPicked) {
+            Write-Verbose "And Operating System is like: $OSPicked."
+            $ActiveComputers = (Get-ADComputer -Filter { (LastLogonTimeStamp -gt $time) -and (Enabled -eq $Enabled) -and (OperatingSystem -like $OSPicked) }).Name
+        }
+        elseif ($POSIX) {
+            Write-Verbose "And Operating System is: Non-Windows(POSIX)."
+            $ActiveComputers = (Get-ADComputer -Filter {OperatingSystem -notlike "*windows*" -and OperatingSystem -notlike "*server*" -and Enabled -eq $Enabled -and lastlogontimestamp -gt $time} ).Name
+        }
+        else{
+            Write-Verbose "And Operating System is -like `"*windows*`" -and Operating System -notlike `"*server*`" (Workstations)."
+            $ActiveComputers = (Get-ADComputer -Filter {OperatingSystem -like "*windows*" -and OperatingSystem -notlike "*server*" -and Enabled -eq $Enabled -and lastlogontimestamp -gt $time} ).Name
+        }
+
         $ADComps = @()
         foreach ($comp in $ActiveComputers) {
             Get-ADComputer -Identity $comp -Properties $propsArray | Select-Object $propsArray -OutVariable ADComp | Out-Null
@@ -216,6 +232,5 @@ function Get-ADDSAssetInventoryAudit {
             Start-Sleep 2
             return $Export
         }
-
     } # End End
 }
