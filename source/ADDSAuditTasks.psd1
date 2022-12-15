@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.9.10'
+    ModuleVersion     = '1.9.11'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -111,7 +111,7 @@
             # ExternalModuleDependencies = @('ActiveDirectory')
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.9.10] - 2022-12-13
+            ReleaseNotes = '## [1.9.11] - 2022-12-15
 
 ### Added
 
