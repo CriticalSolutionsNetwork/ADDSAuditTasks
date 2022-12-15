@@ -27,8 +27,8 @@ class ADComputerAccount {
         [string]$Modified,
         [string]$Description,
         [string]$OrgUnit,
-        [Microsoft.ActiveDirectory.Management.ADPropertyValueCollection]$KerberosEncryptionType,
-        [Microsoft.ActiveDirectory.Management.ADPropertyValueCollection]$SPNs,
+        [string]$KerberosEncryptionType,
+        [string]$SPNs,
         [string]$GroupMemberships,
         [long]$LastSeen
     ) {
@@ -45,7 +45,7 @@ class ADComputerAccount {
         $this.Description = $Description
         $this.OrgUnit = $(($OrgUnit -replace '^.*?,(?=[A-Z]{2}=)') -replace ",", ">")
         $this.KerberosEncryptionType = $(($KerberosEncryptionType | Select-Object -ExpandProperty $_) -replace ", ", " | ")
-        $this.SPNs = $($SPNs -join " | " )
+        $this.SPNs = $SPNs
         $this.GroupMemberships = $(Get-ADComputerGroupMemberof -SamAccountName $GroupMemberships)
         $this.LastSeen = $(
             switch (([DateTime]::FromFileTime($LastSeen))) {
@@ -60,3 +60,6 @@ class ADComputerAccount {
         ) # End LastSeen
     }# End Constuctor 1
 }
+# $($SPNs -join " | " )
+#
+#
