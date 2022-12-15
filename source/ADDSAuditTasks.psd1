@@ -12,7 +12,7 @@
     RootModule        = 'ADDSAuditTasks.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.9.9'
+    ModuleVersion     = '1.9.10'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -108,15 +108,14 @@
             IconUri      = 'https://csn-source.s3.us-east-2.amazonaws.com/CSN-Icon.png'
 
             # External dependent modules of this module
-            ExternalModuleDependencies = @('ActiveDirectory')
+            # ExternalModuleDependencies = @('ActiveDirectory')
 
             # ReleaseNotes of this module
-            ReleaseNotes = '## [1.9.9] - 2022-12-13
+            ReleaseNotes = '## [1.9.10] - 2022-12-13
 
 ### Added
 
-- More generic call for workstations in asset inventory.
-- Additional call for Non-Windows Machines using POSIX.
+- Active Directory Module dependancy
 
 '
 
