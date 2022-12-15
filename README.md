@@ -89,7 +89,7 @@ Get-ADDSAssetInventoryAudit [-OSType] <String> [[-DaystoConsiderAHostInactive] <
 
 
 ```
-### Parameters
+### Parameters (Needs Updating - 12/15/2022)
 | Name  | Alias  | Description | Required? | Pipeline Input | Default Value |
 | - | - | - | - | - | - |
 | <nobr>HostType</nobr> |  | Select from Windows Server or Windows 10 plus. | true | true \\(ByValue\) |  |
