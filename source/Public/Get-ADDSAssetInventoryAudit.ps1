@@ -172,6 +172,7 @@ function Get-ADDSAssetInventoryAudit {
         } # End Foreach
         $ADCompExport = @()
         foreach ($item in $ADComps) {
+            Write-Output $item.servicePrincipalName
             $ADCompExport += [ADComputerAccount]::new(
                 $item.Name,
                 $item.DNSHostName,
@@ -184,8 +185,8 @@ function Get-ADDSAssetInventoryAudit {
                 $item.whenChanged,
                 $item.Description,
                 $item.DistinguishedName,
-                $item.KerberosEncryptionType,
-                $item.servicePrincipalName,
+                $(($item.KerberosEncryptionType).Value.tostring()),
+                ($item.servicePrincipalName -join " | "),
                 $item.Name,
                 $item.lastLogonTimestamp
             ) # End New [ADComputerAccount] object
