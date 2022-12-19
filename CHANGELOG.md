@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Asset Inventory Ouput showing SPNs.
+
 ## [1.9.11] - 2022-12-15
 
 ### Added
