@@ -172,7 +172,6 @@ function Get-ADDSAssetInventoryAudit {
         } # End Foreach
         $ADCompExport = @()
         foreach ($item in $ADComps) {
-            Write-Output $item.servicePrincipalName
             $ADCompExport += [ADComputerAccount]::new(
                 $item.Name,
                 $item.DNSHostName,
